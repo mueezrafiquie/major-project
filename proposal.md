@@ -15,14 +15,19 @@ For the major project I will be creating an Alien Invasion style game.
 - decent sound effects
 - "upgrades" that fall occasionally with aliens which change things like the type of bullet being shot,
   strength or speed of plane
+- project that works with different sized screens
+- a different type of alien that  can also shoot at the player and also aliens that move toward the player wherever you go
+
 
 
 
 ## Nice To Have List:
--
--
--
--
+- nice graphics
+- points and upgrade system using some type of "shop" setup where you can redeem points you get by killing aliens for upgrade, 
+  having lots of different types of upgrades and ship options which you can start with would be cool
+- a "level" screen that shows progress through different level which all have their own types of aliens and unique waves and bosses,
+  measuring progress through those levels with a three star system based on how many aliens were let through/amount of damage taken
+
 
 
 
