@@ -482,7 +482,7 @@ function keyPressed() {
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
 function shootBasicShot() {
-  for (let i = 0; i < basicShot.length; i++) {
+  for (let i = basicShot.length - 1; i >= 0; i--) {
     basicShot[i].y += basicShot[i].dy;
     noStroke();
     fill(0);
@@ -502,7 +502,7 @@ function shootBasicShot() {
 //looping through the doubleShot array to create a bullet for every value entered when the space key is hit
 //DOUBLE SHOT BULLETS CANNOT BE DETECTED YET THEY WILL NOT KILL THE ALIENS
 function shootDoubleShot() {
-  for (let i = 0; i < doubleShot.length; i++) {
+  for (let i = doubleShot.length - 1; i >= 0; i--) {
     doubleShot[i].y += doubleShot[i].dy;
     noStroke();
     fill(0);
@@ -538,8 +538,8 @@ function shoot() {
 //ONLY WORKS WITH BASIC SHOT
 function detectIfHitByBulletAndDestroyAlien() {
   if (shotType === "basic shot") {
-    for (let i = 0; i < basicShot.length; i++) {
-      for (let j = 0; j < aliens.length; j++) {
+    for (let i = basicShot.length - 1; i >= 0; i--) {
+      for (let j = aliens.length - 1; j >= 0; j--) {
         //checking is a bullet hits an aliens hitbox
         if (
           basicShot[i].x > aliens[j].x - 28 &&
@@ -549,6 +549,8 @@ function detectIfHitByBulletAndDestroyAlien() {
         ) {
           //getting rid of aliens that are hit
           aliens.splice(j, 1);
+
+          // basicShot.splice(i, 1);
           //adding one to the score for every alien that is killed
           score += 1;
         }
@@ -558,8 +560,8 @@ function detectIfHitByBulletAndDestroyAlien() {
 
   // DOUBLE SHOT BULLETS CANNOT BE DETECTED YET THEY WILL NOT KILL THE ALIENS
   else if (shotType === "double shot") {
-    for (let i = 0; i < doubleShot.length; i++) {
-      for (let j = 0; j < aliens.length; j++) {
+    for (let i = doubleShot.length - 1 - 1; i >= 0; i--) {
+      for (let j = aliens.length - 1; j >= 0; j--) {
         if (
           doubleShot[i].x > aliens[j].x - 28 &&
           doubleShot[i].x < aliens[j].x + 25 &&
@@ -587,7 +589,7 @@ function drawPlaneHitBox() {
 
 //detects if the plane is hit by an alien by comparing the hitboxes of both
 function detectIfPlaneHitByAlien() {
-  for (let i = 0; i < aliens.length; i++) {
+  for (let i = aliens.length - 1; i >= 0; i--) {
     if (
       aliens[i].x + 25 >= planeX - 20 * scalar &&
       aliens[i].x - 28 <= planeX + 20 * scalar &&
@@ -613,23 +615,26 @@ function detectIfPlaneHitByAlien() {
 //creating a class to store basic information from which all aliens will be made
 class Alien {
   //sample alien coordinate values
-  constructor(x, y) {
+  constructor(x, y, path) {
     this.x = x;
     this.y = y;
+    this.path = path;
   }
 
   //moving the individual alien according to difficulty
   moveIndividualAliens() {
-    let movementValue = 1;
-    if (gameMode === "easy mode") {
-      movementValue = 1;
-    } else if (gameMode === "hard mode") {
-      movementValue = 3;
+    if ((this.path = "simple top-down")) {
+      let movementValue = 1;
+      if (gameMode === "easy mode") {
+        movementValue = 1;
+      } else if (gameMode === "hard mode") {
+        movementValue = 3;
+      }
+      this.x = this.x + random(-movementValue, movementValue);
+      this.y = this.y + random(0, movementValue);
+      imageMode(CENTER);
+      image(alienImage, this.x, this.y, 50, 50);
     }
-    this.x = this.x + random(-movementValue, movementValue);
-    this.y = this.y + random(0, movementValue);
-    imageMode(CENTER);
-    image(alienImage, this.x, this.y, 50, 50);
   }
   //creating a hitbox for an individual aliens
   individualHitBox() {
@@ -642,17 +647,17 @@ class Alien {
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
   aliens.push(
-    new Alien(width * random(0.05, 0.12), 150),
-    new Alien(width * random(0.2, 0.3), 150),
-    new Alien(width * random(0.35, 0.45), 150),
-    new Alien(width * random(0.5, 0.6), 150),
-    new Alien(width * random(0.7, 0.9), 150)
+    new Alien(width * random(0.05, 0.12), 150, "simple top-down"),
+    new Alien(width * random(0.2, 0.3), 150, "simple top-down"),
+    new Alien(width * random(0.35, 0.45), 150, "simple top-down"),
+    new Alien(width * random(0.5, 0.6), 150, "simple top-down"),
+    new Alien(width * random(0.7, 0.9), 150, "simple top-down")
   );
 }
 
 //looping through all the aliens created to apply the movement function to each of them
 function moveAliens() {
-  for (let i = 0; i < aliens.length; i++) {
+  for (let i = aliens.length - 1; i >= 0; i--) {
     aliens[i].moveIndividualAliens();
     if (aliens[i].y - 25 > height) {
       aliens.shift();
@@ -673,7 +678,7 @@ function sendAlienWaves() {
 
 //looping through all aliens to draw a hitbox
 function drawHitBox() {
-  for (let i = 0; i < aliens.length; i++) {
+  for (let i = aliens.length - 1; i >= 0; i--) {
     aliens[i].individualHitBox();
   }
 }
