@@ -26,7 +26,7 @@ let scalar = 0.2;
 //state variables: one that changes the type of bullets the plane shoots and the other
 //which switches the game between screens
 let shotType = "basic shot";
-let gameMode = "main menu";
+let gameMode = "hard mode";
 let currentGameMode;
 
 //arrays to store the data from the objects being used to push information into them
@@ -128,7 +128,7 @@ function runEasyModeGame() {
 function runHardModeGame() {
   currentGameMode = "hard mode";
   //lowering time between waves to increase difficulty
-  timeBetweenWaves = 2000;
+  timeBetweenWaves = 100;
   runGame();
 }
 
@@ -621,21 +621,45 @@ class Alien {
     this.path = path;
   }
 
-  //moving the individual alien according to difficulty
+  // //moving the individual alien according to difficulty
+  // moveIndividualAliens() {
+  //   if (this.path === "simple top-down") {
+  //     let movementValue = 15;
+  //     for (let i = aliens.length - 1; i >= 0; i--) {
+  //       this.x = this.x + movementValue;
+  //       this.y = this.y + 0.5;
+  //       if (aliens[i].x + 50 > width) {
+  //         aliens.shift();
+  //         // gameMode = "game over";
+  //         // resetArrays();
+  //       }
+  //     }
+
+  //     imageMode(CENTER);
+  //     image(alienImage, this.x, this.y, 50, 50);
+  //   }
+  // }
   moveIndividualAliens() {
-    if ((this.path = "simple top-down")) {
-      let movementValue = 1;
-      if (gameMode === "easy mode") {
-        movementValue = 1;
-      } else if (gameMode === "hard mode") {
-        movementValue = 3;
+    if (this.path === "zigzag") {
+      let movementValue = 15;
+
+      if (this.x <= width - 50) {
+        this.x = this.x + movementValue;
+        this.y = this.y + 0.5;
       }
-      this.x = this.x + random(-movementValue, movementValue);
-      this.y = this.y + random(0, movementValue);
+      
+
+      else if (this.x >= 50) {
+        movementValue *= -1;
+        this.x = this.x + movementValue;
+        this.y = this.y + 0.5;
+      }
+
       imageMode(CENTER);
       image(alienImage, this.x, this.y, 50, 50);
     }
   }
+
   //creating a hitbox for an individual aliens
   individualHitBox() {
     noStroke();
@@ -646,13 +670,7 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  aliens.push(
-    new Alien(width * random(0.05, 0.12), 150, "simple top-down"),
-    new Alien(width * random(0.2, 0.3), 150, "simple top-down"),
-    new Alien(width * random(0.35, 0.45), 150, "simple top-down"),
-    new Alien(width * random(0.5, 0.6), 150, "simple top-down"),
-    new Alien(width * random(0.7, 0.9), 150, "simple top-down")
-  );
+  aliens.push(new Alien(width * 0.5, 50, "zigzag"));
 }
 
 //looping through all the aliens created to apply the movement function to each of them
@@ -661,8 +679,8 @@ function moveAliens() {
     aliens[i].moveIndividualAliens();
     if (aliens[i].y - 25 > height) {
       aliens.shift();
-      gameMode = "game over";
-      resetArrays();
+      // gameMode = "game over";
+      // resetArrays();
     }
   }
 }
