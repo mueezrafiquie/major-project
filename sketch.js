@@ -12,6 +12,7 @@
 
 //Global Variables
 
+let thing;
 //time variables
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
@@ -619,6 +620,8 @@ class Alien {
     this.x = x;
     this.y = y;
     this.path = path;
+    this.dx = 15;
+    this.dy = 0.5;
   }
 
   // //moving the individual alien according to difficulty
@@ -639,21 +642,26 @@ class Alien {
   //     image(alienImage, this.x, this.y, 50, 50);
   //   }
   // }
+
   moveIndividualAliens() {
     if (this.path === "zigzag") {
-      let movementValue = 15;
-
       if (this.x <= width - 50) {
-        this.x = this.x + movementValue;
-        this.y = this.y + 0.5;
-      }
+        this.x = this.x + this.dx;
+        this.y += this.dy;
+      } 
       
-
-      else if (this.x >= 50) {
-        movementValue *= -1;
-        this.x = this.x + movementValue;
-        this.y = this.y + 0.5;
-      }
+      else if (this.x >= 150) {
+        this.dy = 0;
+        this.y = 150;
+        this.dx *= -1;
+        this.x += this.dx;
+      } 
+      
+      // else {
+      //   this.y = 300;
+      //   this.dx *= -1;
+      //   this.x += this.dx;
+      // }
 
       imageMode(CENTER);
       image(alienImage, this.x, this.y, 50, 50);
