@@ -12,10 +12,13 @@
 
 //Global Variables
 
-let thing;
+
 //time variables
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
+
+let singleWaveGap = 100;
+let spacerBetweenAliens = 0;
 
 //plane variables
 let plane;
@@ -129,7 +132,7 @@ function runEasyModeGame() {
 function runHardModeGame() {
   currentGameMode = "hard mode";
   //lowering time between waves to increase difficulty
-  timeBetweenWaves = 100;
+  timeBetweenWaves = 3000;
   runGame();
 }
 
@@ -648,15 +651,13 @@ class Alien {
       if (this.x <= width - 50) {
         this.x = this.x + this.dx;
         this.y += this.dy;
-      } 
-      
-      else if (this.x >= 150) {
+      } else if (this.x >= 150) {
         this.dy = 0;
         this.y = 150;
         this.dx *= -1;
         this.x += this.dx;
-      } 
-      
+      }
+
       // else {
       //   this.y = 300;
       //   this.dx *= -1;
@@ -678,7 +679,18 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  aliens.push(new Alien(width * 0.5, 50, "zigzag"));
+  for (i = 0; i <= 5; i++) {
+    aliens.push(new Alien(width * 0.5, 50, "zigzag"));
+  }
+}
+
+//using millis to continously send waves of aliens over time
+function sendAlienWaves() {
+  if (millis() >= lastTimeWaveWasSent + timeBetweenWaves) {
+    createNewAliens();
+    moveAliens();
+    lastTimeWaveWasSent = millis();
+  }
 }
 
 //looping through all the aliens created to apply the movement function to each of them
@@ -690,15 +702,6 @@ function moveAliens() {
       // gameMode = "game over";
       // resetArrays();
     }
-  }
-}
-
-//using millis to continously send waves of aliens over time
-function sendAlienWaves() {
-  if (millis() >= lastTimeWaveWasSent + timeBetweenWaves) {
-    createNewAliens();
-    moveAliens();
-    lastTimeWaveWasSent = millis();
   }
 }
 
