@@ -12,7 +12,6 @@
 
 //Global Variables
 
-
 //time variables
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
@@ -447,16 +446,19 @@ function resetArrays() {
 //allowing plane to shoot
 function keyPressed() {
   //creating objects in which information about the bullets is stored to be pushed into arrays
-  if (keyCode === 32 && shotType === "basic shot") {
-    //playing sound and created the object for the basic shot
-    shootingSound.play();
-    let basicShotValues = {
-      x: planeX,
-      y: planeY - 210 * scalar,
-      r: 5,
-      dy: -5
-    };
-    basicShot.push(basicShotValues);
+  if (keyIsDown) {
+    console.log("hey")
+    if (keyCode === 32 && shotType === "basic shot") {
+      //playing sound and created the object for the basic shot
+      shootingSound.play();
+      let basicShotValues = {
+        x: planeX,
+        y: planeY - 210 * scalar,
+        r: 5,
+        dy: -5
+      };
+      basicShot.push(basicShotValues);
+    }
   } else if (keyCode === 32 && shotType === "double shot") {
     //playing sound and created the object for the double shot
     shootingSound.play();
@@ -624,7 +626,7 @@ class Alien {
     this.y = y;
     this.path = path;
     this.dx = 15;
-    this.dy = 0.5;
+    this.dy = 2;
   }
 
   // //moving the individual alien according to difficulty
@@ -649,14 +651,28 @@ class Alien {
   moveIndividualAliens() {
     if (this.path === "zigzag") {
       if (this.x <= width - 50) {
-        this.x = this.x + this.dx;
+        // console.log("ys");
+        this.x += this.dx;
         this.y += this.dy;
-      } else if (this.x >= 150) {
+      }
+      // else if (this.x <= 25) {
+      //   console.log("yop")
+      //   this.dy = 0;
+      //   this.y = 150;
+      //   this.dx *= -1;
+      //   this.x += this.dx;
+      // }
+      else if (this.x >= 200) {
+        // console.log("nope");
         this.dy = 0;
         this.y = 150;
         this.dx *= -1;
         this.x += this.dx;
       }
+      // else {
+      //   this.dx = 0
+      //   this.dy = 0
+      // }
 
       // else {
       //   this.y = 300;
@@ -679,8 +695,9 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  for (i = 0; i <= 5; i++) {
-    aliens.push(new Alien(width * 0.5, 50, "zigzag"));
+  let startingXPositions = [0.25, 0.2, 0.15, 0.1, 0.05];
+  for (i = 0; i <= 4; i++) {
+    aliens.push(new Alien(width * startingXPositions[i], -20, "zigzag"));
   }
 }
 
