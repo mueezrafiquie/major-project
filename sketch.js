@@ -102,6 +102,7 @@ function runGame() {
 
   //enabling plane to move and shoot
   moveInsideCanvas();
+  createShots();
   shoot();
 
   //moving aliens down the screen in waves
@@ -443,35 +444,39 @@ function resetArrays() {
   aliens = [];
 }
 
+function createShots() {
+  if (keyIsDown) {
+    if (frameCount % 8 === 0) {
+      if (keyCode === 32 && shotType === "basic shot") {
+        //playing sound and created the object for the basic shot
+        shootingSound.play();
+        let basicShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        basicShot.push(basicShotValues);
+      } else if (keyCode === 32 && shotType === "double shot") {
+        //playing sound and created the object for the double shot
+        shootingSound.play();
+        let doubleShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        doubleShot.push(doubleShotValues);
+      }
+    }
+  }
+}
+
 //allowing plane to shoot
 function keyPressed() {
   //creating objects in which information about the bullets is stored to be pushed into arrays
-  if (keyIsDown) {
-    console.log("hey")
-    if (keyCode === 32 && shotType === "basic shot") {
-      //playing sound and created the object for the basic shot
-      shootingSound.play();
-      let basicShotValues = {
-        x: planeX,
-        y: planeY - 210 * scalar,
-        r: 5,
-        dy: -5
-      };
-      basicShot.push(basicShotValues);
-    }
-  } else if (keyCode === 32 && shotType === "double shot") {
-    //playing sound and created the object for the double shot
-    shootingSound.play();
-    let doubleShotValues = {
-      x: planeX,
-      y: planeY - 210 * scalar,
-      r: 5,
-      dy: -5
-    };
-    doubleShot.push(doubleShotValues);
-  }
-  //allowing you to switch between shot types
-  else if (keyCode === 76) {
+
+  if (keyCode === 76) {
     if (shotType === "basic shot") {
       shotType = "double shot";
     } else if (shotType === "double shot") {
@@ -484,6 +489,9 @@ function keyPressed() {
     score = 0;
     resetArrays();
   }
+  console.log("hey");
+
+  //allowing you to switch between shot types
 }
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
@@ -649,7 +657,19 @@ class Alien {
   // }
 
   moveIndividualAliens() {
-    if (this.path === "zigzag") {
+    if (this.path === "simple top-down") {
+      for (let i = aliens.length - 1; i >= 0; i--) {
+        this.y = this.y + 0.5;
+        if (aliens[i].x > height) {
+          aliens.shift();
+          // gameMode = "game over";
+          // resetArrays();
+        }
+      }
+
+      imageMode(CENTER);
+      image(alienImage, this.x, this.y, 50, 50);
+    } else if (this.path === "zigzag") {
       if (this.x <= width - 50) {
         // console.log("ys");
         this.x += this.dx;
@@ -699,6 +719,7 @@ function createNewAliens() {
   for (i = 0; i <= 4; i++) {
     aliens.push(new Alien(width * startingXPositions[i], -20, "zigzag"));
   }
+  // aliens.push(new Alien(width/2, height/2, "simple top-down"));
 }
 
 //using millis to continously send waves of aliens over time
