@@ -444,7 +444,26 @@ function resetArrays() {
   aliens = [];
 }
 
+//allowing plane to shoot
+function keyPressed() {
+  //allowing you to switch between shot types
+  if (keyCode === 76) {
+    if (shotType === "basic shot") {
+      shotType = "double shot";
+    } else if (shotType === "double shot") {
+      shotType = "basic shot";
+    }
+  }
+  //allowing the menu to be accessed at any time by using the "m" key
+  else if (keyCode === 77) {
+    gameMode = "main menu";
+    score = 0;
+    resetArrays();
+  }
+}
+
 function createShots() {
+  //creating objects in which information about the bullets is stored to be pushed into arrays
   if (keyIsDown) {
     if (frameCount % 8 === 0) {
       if (keyCode === 32 && shotType === "basic shot") {
@@ -472,27 +491,6 @@ function createShots() {
   }
 }
 
-//allowing plane to shoot
-function keyPressed() {
-  //creating objects in which information about the bullets is stored to be pushed into arrays
-
-  if (keyCode === 76) {
-    if (shotType === "basic shot") {
-      shotType = "double shot";
-    } else if (shotType === "double shot") {
-      shotType = "basic shot";
-    }
-  }
-  //allowing the menu to be accessed at any time by using the "m" key
-  else if (keyCode === 77) {
-    gameMode = "main menu";
-    score = 0;
-    resetArrays();
-  }
-  console.log("hey");
-
-  //allowing you to switch between shot types
-}
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
 function shootBasicShot() {
@@ -671,24 +669,23 @@ class Alien {
       image(alienImage, this.x, this.y, 50, 50);
     } else if (this.path === "zigzag") {
       if (this.x <= width - 50) {
-        // console.log("ys");
         this.x += this.dx;
         this.y += this.dy;
-      }
-      // else if (this.x <= 25) {
-      //   console.log("yop")
-      //   this.dy = 0;
-      //   this.y = 150;
-      //   this.dx *= -1;
-      //   this.x += this.dx;
-      // }
+      } 
       else if (this.x >= 200) {
-        // console.log("nope");
         this.dy = 0;
-        this.y = 150;
+        this.y += 50;
+        this.dx *= -1;
+        this.x += this.dx;
+      } 
+      if (this.x <= 50) {
+        this.dy = 1;
+        this.y += 50;
         this.dx *= -1;
         this.x += this.dx;
       }
+      
+
       // else {
       //   this.dx = 0
       //   this.dy = 0
@@ -716,7 +713,7 @@ class Alien {
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
   let startingXPositions = [0.25, 0.2, 0.15, 0.1, 0.05];
-  for (i = 0; i <= 4; i++) {
+  for (i = 0; i <= 5; i++) {
     aliens.push(new Alien(width * startingXPositions[i], -20, "zigzag"));
   }
   // aliens.push(new Alien(width/2, height/2, "simple top-down"));
