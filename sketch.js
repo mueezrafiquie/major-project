@@ -37,6 +37,8 @@ let basicShot = [];
 let doubleShot = [];
 let aliens = [];
 
+let isShooting = false;
+
 //running score which will get reset when replayed
 let score = 0;
 
@@ -44,7 +46,7 @@ let score = 0;
 function preload() {
   //loading images
   plane = loadImage("assets/plane.png");
-  sky = loadImage("assets/skybackground.jpg");
+  background1 = loadImage("assets/background1.png");
   alienImage = loadImage("assets/alien.png");
 
   //loading sounds
@@ -95,14 +97,14 @@ function windowResized() {
 //combining all the function necessary to run the game
 function runGame() {
   //drawing background
-  image(sky, 0, 0, width * 2, height * 2);
+  image(background1, 0, 0, width * 2, height * 2);
 
   //displays score
   showScore();
 
   //enabling plane to move and shoot
   moveInsideCanvas();
-  createShots();
+  createContinousShots();
   shoot();
 
   //moving aliens down the screen in waves
@@ -380,19 +382,19 @@ function movePlane() {
     //changing x and y cords with WASD keys to move image
     if (keyIsDown(87)) {
       imageMode(CENTER);
-      image(sky, 0, 0, width * 2, height * 2); //w
+      image(background1, 0, 0, width * 2, height * 2); //w
       showScore();
       planeY -= 10;
     } else if (keyIsDown(65)) {
-      image(sky, 0, 0, width * 2, height * 2); //a
+      image(background1, 0, 0, width * 2, height * 2); //a
       showScore();
       planeX -= 10;
     } else if (keyIsDown(83)) {
-      image(sky, 0, 0, width * 2, height * 2); //s
+      image(background1, 0, 0, width * 2, height * 2); //s
       showScore();
       planeY += 10;
     } else if (keyIsDown(68)) {
-      image(sky, 0, 0, width * 2, height * 2); //d
+      image(background1, 0, 0, width * 2, height * 2); //d
       showScore();
       planeX += 10;
     }
@@ -446,6 +448,34 @@ function resetArrays() {
 
 //allowing plane to shoot
 function keyPressed() {
+  if (keyCode === 32 && shotType === "basic shot") {
+    //playing sound and created the object for the basic shot
+    shootingSound.play();
+    let basicShotValues = {
+      x: planeX,
+      y: planeY - 210 * scalar,
+      r: 5,
+      dy: -5
+    };
+    basicShot.push(basicShotValues);
+  } else if (keyCode === 32 && shotType === "double shot") {
+    //playing sound and created the object for the double shot
+    shootingSound.play();
+    let doubleShotValues = {
+      x: planeX,
+      y: planeY - 210 * scalar,
+      r: 5,
+      dy: -5
+    };
+    doubleShot.push(doubleShotValues);
+  }
+
+  if ((shotType === "basic-continuous shot")) {
+    if (keyCode === 32) {
+      isShooting = true;
+    }
+  }
+
   //allowing you to switch between shot types
   if (keyCode === 76) {
     if (shotType === "basic shot") {
@@ -462,11 +492,17 @@ function keyPressed() {
   }
 }
 
-function createShots() {
+function keyReleased() {
+  if (keyCode === 32) {
+    isShooting = false;
+  }
+}
+
+function createContinousShots() {
   //creating objects in which information about the bullets is stored to be pushed into arrays
   if (keyIsDown) {
     if (frameCount % 8 === 0) {
-      if (keyCode === 32 && shotType === "basic shot") {
+      if (isShooting && shotType === "basic shot") {
         //playing sound and created the object for the basic shot
         shootingSound.play();
         let basicShotValues = {
@@ -476,7 +512,7 @@ function createShots() {
           dy: -5
         };
         basicShot.push(basicShotValues);
-      } else if (keyCode === 32 && shotType === "double shot") {
+      } else if (isShooting && shotType === "double shot") {
         //playing sound and created the object for the double shot
         shootingSound.play();
         let doubleShotValues = {
@@ -490,7 +526,6 @@ function createShots() {
     }
   }
 }
-
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
 function shootBasicShot() {
@@ -671,20 +706,18 @@ class Alien {
       if (this.x <= width - 50) {
         this.x += this.dx;
         this.y += this.dy;
-      } 
-      else if (this.x >= 200) {
+      } else if (this.x >= 200) {
         this.dy = 0;
         this.y += 50;
         this.dx *= -1;
         this.x += this.dx;
-      } 
+      }
       if (this.x <= 50) {
         this.dy = 1;
         this.y += 50;
         this.dx *= -1;
         this.x += this.dx;
       }
-      
 
       // else {
       //   this.dx = 0

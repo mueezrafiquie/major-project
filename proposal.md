@@ -16,11 +16,8 @@ For the major project I will be creating an Alien Invasion style game. There wil
 - a scoring system that tracks highscores and progression
 - "upgrades" that fall occasionally with aliens which change things like the type of bullet being shot,
   strength or speed of plane
-- project that works with different sized screens
 - a different type of alien that  can also shoot at the player and also aliens that move toward the player wherever you go
-- a "level" screen that shows progress through different level which all have their own types of aliens and unique waves and bosses,
-  measuring progress through those levels with a three star system based on how many aliens were let through/amount of damage taken
-- different game modes: arcade mode where it's one giant level that keeps going and it tracks how long you last vs a level system
+
 
 
 ## Nice To Have List:
@@ -30,7 +27,10 @@ For the major project I will be creating an Alien Invasion style game. There wil
 - different background music for differnt levels and game screens 
 - very smooth animations for the alien waves, the bullets and the plane 
 - different planes, in addition to already being stronger or weaker, will have their own special ability that maybe has a cooldown
-
+- a "level" screen that shows progress through different level which all have their own types of aliens and unique waves and bosses,
+  measuring progress through those levels with a three star system based on how many aliens were let through/amount of damage taken
+- different game modes: arcade mode where it's one giant level that keeps going and it tracks how long you last vs a level system
+- project that works with different sized screens
 
 
 
