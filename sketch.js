@@ -532,7 +532,7 @@ function shootBasicShot() {
   for (let i = basicShot.length - 1; i >= 0; i--) {
     basicShot[i].y += basicShot[i].dy;
     noStroke();
-    fill(0);
+    fill(180);
     ellipse(
       basicShot[i].x,
       basicShot[i].y,
@@ -552,7 +552,7 @@ function shootDoubleShot() {
   for (let i = doubleShot.length - 1; i >= 0; i--) {
     doubleShot[i].y += doubleShot[i].dy;
     noStroke();
-    fill(0);
+    fill(180);
     ellipse(
       doubleShot[i].x - 5,
       doubleShot[i].y,
@@ -582,17 +582,17 @@ function shoot() {
 }
 
 //detects if an any alien is hit by any bullet by looping throught both arrays
-//ONLY WORKS WITH BASIC SHOT
+
 function detectIfHitByBulletAndDestroyAlien() {
   if (shotType === "basic shot") {
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
         //checking is a bullet hits an aliens hitbox
         if (
-          basicShot[i].x > aliens[j].x - 28 &&
-          basicShot[i].x < aliens[j].x + 25 &&
-          basicShot[i].y > aliens[j].y - 25 &&
-          basicShot[i].y < aliens[j].y + 25
+          basicShot[i].x + basicShot[i].r > aliens[j].x - 28 &&
+          basicShot[i].x + basicShot[i].r < aliens[j].x + 28 &&
+          basicShot[i].y + basicShot[i].r > aliens[j].y - 25 &&
+          basicShot[i].y + basicShot[i].r < aliens[j].y + 25
         ) {
           //getting rid of aliens that are hit
           aliens.splice(j, 1);
