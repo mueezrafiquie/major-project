@@ -718,6 +718,9 @@ class Alien {
         this.dx *= -1;
         this.x += this.dx;
       }
+      if (this.x === width / 2 && this.y > 250) {
+        aliens.shift();
+      }
 
       // else {
       //   this.dx = 0
@@ -747,7 +750,7 @@ class Alien {
 function createNewAliens() {
   let startingXPositions = [0.25, 0.2, 0.15, 0.1, 0.05];
   for (i = 0; i <= 5; i++) {
-    aliens.push(new Alien(width * startingXPositions[i], -20, "zigzag"));
+    aliens.push(new Alien(width * startingXPositions[i], -19, "zigzag"));
   }
   // aliens.push(new Alien(width/2, height/2, "simple top-down"));
 }
