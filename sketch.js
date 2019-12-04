@@ -470,7 +470,7 @@ function keyPressed() {
     doubleShot.push(doubleShotValues);
   }
 
-  if ((shotType === "basic-continuous shot")) {
+  if (shotType === "basic-continuous shot") {
     if (keyCode === 32) {
       isShooting = true;
     }
@@ -707,18 +707,18 @@ class Alien {
         this.x += this.dx;
         this.y += this.dy;
       } else if (this.x >= 200) {
-        this.dy = 0;
-        this.y += 50;
+        this.dy = .5;
+        this.y += 65;
         this.dx *= -1;
         this.x += this.dx;
       }
       if (this.x <= 50) {
-        this.dy = 1;
-        this.y += 50;
+        this.dy = .5;
+        this.y += 65;
         this.dx *= -1;
         this.x += this.dx;
       }
-      if (this.x === width / 2 && this.y > 250) {
+      if (this.x <= width/2 && this.y > 250) {
         aliens.shift();
       }
 
@@ -748,8 +748,8 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  let startingXPositions = [0.25, 0.2, 0.15, 0.1, 0.05];
-  for (i = 0; i <= 5; i++) {
+  let startingXPositions = [ 0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
+  for (i = 0; i <= 8; i++) {
     aliens.push(new Alien(width * startingXPositions[i], -19, "zigzag"));
   }
   // aliens.push(new Alien(width/2, height/2, "simple top-down"));
