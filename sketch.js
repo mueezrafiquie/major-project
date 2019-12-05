@@ -38,6 +38,7 @@ let doubleShot = [];
 let aliens = [];
 
 let isShooting = false;
+let direction = "right";
 
 //running score which will get reset when replayed
 let score = 0;
@@ -112,7 +113,7 @@ function runGame() {
   moveAliens();
 
   //detecting if an alien is his by a bullet or if the plane is hit by and alien
-  detectIfHitByBulletAndDestroyAlien();
+  detectIfAlienHitByBulletAndDestroy();
   detectIfPlaneHitByAlien();
 
   //drawing the plane image
@@ -583,7 +584,7 @@ function shoot() {
 
 //detects if an any alien is hit by any bullet by looping throught both arrays
 
-function detectIfHitByBulletAndDestroyAlien() {
+function detectIfAlienHitByBulletAndDestroy() {
   if (shotType === "basic shot") {
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
@@ -595,11 +596,11 @@ function detectIfHitByBulletAndDestroyAlien() {
           basicShot[i].y + basicShot[i].r < aliens[j].y + 25
         ) {
           //getting rid of aliens that are hit
+          basicShot.splice(i, 1);
           aliens.splice(j, 1);
-
-          // basicShot.splice(i, 1);
           //adding one to the score for every alien that is killed
           score += 1;
+          return;
         }
       }
     }
@@ -667,7 +668,7 @@ class Alien {
     this.y = y;
     this.path = path;
     this.dx = 15;
-    this.dy = 2;
+    this.dy = 1;
   }
 
   // //moving the individual alien according to difficulty
@@ -692,9 +693,9 @@ class Alien {
   moveIndividualAliens() {
     if (this.path === "simple top-down") {
       for (let i = aliens.length - 1; i >= 0; i--) {
-        this.y = this.y + 0.5;
+        this.y += this.dy;
         if (aliens[i].x > height) {
-          aliens.shift();
+          // aliens.shift();
           // gameMode = "game over";
           // resetArrays();
         }
@@ -702,35 +703,27 @@ class Alien {
 
       imageMode(CENTER);
       image(alienImage, this.x, this.y, 50, 50);
-    } else if (this.path === "zigzag") {
-      if (this.x <= width - 50) {
-        this.x += this.dx;
-        this.y += this.dy;
-      } else if (this.x >= 200) {
-        this.dy = .5;
-        this.y += 65;
+    } 
+    else if (this.path === "zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= width - 100 || this.x <= 25) {
         this.dx *= -1;
-        this.x += this.dx;
       }
-      if (this.x <= 50) {
-        this.dy = .5;
-        this.y += 65;
-        this.dx *= -1;
-        this.x += this.dx;
-      }
-      if (this.x <= width/2 && this.y > 250) {
-        aliens.shift();
-      }
-
-      // else {
-      //   this.dx = 0
-      //   this.dy = 0
-      // }
-
-      // else {
-      //   this.y = 300;
+      // else if (this.x >= 200) {
+      //   this.dy = .5;
+      //   this.y += 65;
       //   this.dx *= -1;
       //   this.x += this.dx;
+      // }
+      // if (this.x <= 50) {
+      //   this.dy = .5;
+      //   this.y += 65;
+      //   this.dx *= -1;
+      //   this.x += this.dx;
+      // }
+      // if (this.x <= width / 2 && this.y > 500) {
+      //   aliens.shift();
       // }
 
       imageMode(CENTER);
@@ -748,11 +741,12 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  let startingXPositions = [ 0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
+  let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
   for (i = 0; i <= 8; i++) {
     aliens.push(new Alien(width * startingXPositions[i], -19, "zigzag"));
   }
-  // aliens.push(new Alien(width/2, height/2, "simple top-down"));
+  // aliens.push(new Alien(width / 2, height / 2, "simple top-down"));
+  // aliens.push(new Alien(width / 2, height / 2, "zigzag"));
 }
 
 //using millis to continously send waves of aliens over time
@@ -768,11 +762,11 @@ function sendAlienWaves() {
 function moveAliens() {
   for (let i = aliens.length - 1; i >= 0; i--) {
     aliens[i].moveIndividualAliens();
-    if (aliens[i].y - 25 > height) {
-      aliens.shift();
+    // if (aliens[i].y - 25 > height) {
+    //   aliens.shift();
       // gameMode = "game over";
       // resetArrays();
-    }
+    // }
   }
 }
 
