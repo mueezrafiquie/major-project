@@ -701,34 +701,46 @@ class Alien {
         }
       }
 
-      imageMode(CENTER);
-      image(alienImage, this.x, this.y, 50, 50);
+     
     } 
-    else if (this.path === "zigzag") {
+    else if (this.path === "simple zigzag") {
       this.x += this.dx;
       this.y += this.dy;
       if (this.x >= width - 100 || this.x <= 25) {
         this.dx *= -1;
       }
-      // else if (this.x >= 200) {
-      //   this.dy = .5;
-      //   this.y += 65;
-      //   this.dx *= -1;
-      //   this.x += this.dx;
-      // }
-      // if (this.x <= 50) {
-      //   this.dy = .5;
-      //   this.y += 65;
-      //   this.dx *= -1;
-      //   this.x += this.dx;
-      // }
-      // if (this.x <= width / 2 && this.y > 500) {
-      //   aliens.shift();
-      // }
 
-      imageMode(CENTER);
-      image(alienImage, this.x, this.y, 50, 50);
+      
     }
+    else if (this.path === "tight-left zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= 400 || this.x <= 25) {
+        this.dx *= -1;
+      }
+    }
+    else if (this.path === "tight-right zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= width - 25 || this.x <= width - 400) {
+        this.dx *= -1;
+      }
+    }
+    else if (this.path === "circle thing") {
+      if (this.y < height/2) {
+        this.y = "make a parobola function"
+
+
+        this.y += this.dy;
+
+      }
+      
+      // if (this.x >= width - 25 || this.x <= width - 400) {
+        // this.dx *= -1;
+      // }
+    }
+    imageMode(CENTER);
+  image(alienImage, this.x, this.y, 50, 50);
   }
 
   //creating a hitbox for an individual aliens
@@ -743,10 +755,12 @@ class Alien {
 function createNewAliens() {
   let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
   for (i = 0; i <= 8; i++) {
-    aliens.push(new Alien(width * startingXPositions[i], -19, "zigzag"));
+    // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
   }
-  // aliens.push(new Alien(width / 2, height / 2, "simple top-down"));
-  // aliens.push(new Alien(width / 2, height / 2, "zigzag"));
+  // aliens.push(new Alien(width * 0.75, height / 2, "simple top-down"));
+  aliens.push(new Alien(50, 0, "tight-left zigzag"));
+  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  aliens.push(new Alien(width /2, 0, "circle thing"));
 }
 
 //using millis to continously send waves of aliens over time
