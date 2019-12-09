@@ -59,6 +59,9 @@ function preload() {
 function setup() {
   //creating canvas
   createCanvas(windowWidth, windowHeight);
+  
+  angleMode(DEGREES);
+
   //pushing the starting aliens into the aliens array
   createNewAliens();
 
@@ -692,55 +695,49 @@ class Alien {
 
   moveIndividualAliens() {
     if (this.path === "simple top-down") {
-      for (let i = aliens.length - 1; i >= 0; i--) {
-        this.y += this.dy;
-        if (aliens[i].x > height) {
-          // aliens.shift();
-          // gameMode = "game over";
-          // resetArrays();
-        }
-      }
-
-     
-    } 
-    else if (this.path === "simple zigzag") {
+      // for (let i = aliens.length - 1; i >= 0; i--) {
+      this.y += this.dy;
+      // if (aliens[i].x > height) {
+      // aliens.shift();
+      // gameMode = "game over";
+      // resetArrays();
+      // }
+      // }
+    } else if (this.path === "simple zigzag") {
       this.x += this.dx;
       this.y += this.dy;
       if (this.x >= width - 100 || this.x <= 25) {
         this.dx *= -1;
       }
-
-      
-    }
-    else if (this.path === "tight-left zigzag") {
+    } else if (this.path === "tight-left zigzag") {
       this.x += this.dx;
       this.y += this.dy;
       if (this.x >= 400 || this.x <= 25) {
         this.dx *= -1;
       }
-    }
-    else if (this.path === "tight-right zigzag") {
+    } else if (this.path === "tight-right zigzag") {
       this.x += this.dx;
       this.y += this.dy;
       if (this.x >= width - 25 || this.x <= width - 400) {
         this.dx *= -1;
       }
-    }
-    else if (this.path === "circle thing") {
-      if (this.y < height/2) {
-        this.y = "make a parobola function"
+    } else if (this.path === "circle thing") {
+    
+      let theta = -90;
+
+      circlePathX = cos(theta);
+      circlePathY = sin(theta);
+      translate();
 
 
-        this.y += this.dy;
+      // this.y = 4 * sq(this.x) + this.x;
 
-      }
-      
-      // if (this.x >= width - 25 || this.x <= width - 400) {
-        // this.dx *= -1;
-      // }
+      // this.y += this.dy;
+
+  
     }
     imageMode(CENTER);
-  image(alienImage, this.x, this.y, 50, 50);
+    image(alienImage, this.x, this.y, 50, 50);
   }
 
   //creating a hitbox for an individual aliens
@@ -758,9 +755,9 @@ function createNewAliens() {
     // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
   }
   // aliens.push(new Alien(width * 0.75, height / 2, "simple top-down"));
-  aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
-  aliens.push(new Alien(width /2, 0, "circle thing"));
+  // aliens.push(new Alien(50, 0, "tight-left zigzag"));
+  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  aliens.push(new Alien(width /2, 100, "circle thing"));
 }
 
 //using millis to continously send waves of aliens over time
@@ -778,8 +775,8 @@ function moveAliens() {
     aliens[i].moveIndividualAliens();
     // if (aliens[i].y - 25 > height) {
     //   aliens.shift();
-      // gameMode = "game over";
-      // resetArrays();
+    // gameMode = "game over";
+    // resetArrays();
     // }
   }
 }
