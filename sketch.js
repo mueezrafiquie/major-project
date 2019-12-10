@@ -59,7 +59,7 @@ function preload() {
 function setup() {
   //creating canvas
   createCanvas(windowWidth, windowHeight);
-  
+
   angleMode(DEGREES);
 
   //pushing the starting aliens into the aliens array
@@ -722,19 +722,20 @@ class Alien {
         this.dx *= -1;
       }
     } else if (this.path === "circle thing") {
-    
-      let theta = -90;
+      let theta = -91;
 
-      circlePathX = cos(theta);
-      circlePathY = sin(theta);
-      translate();
+      this.x = cos(theta) * 1;
+      this.y = sin(theta) * 1;
+      theta -= 0.5;
 
+      // if (this.x > 50) {
+      //   this.x = 50;
+      // }
 
-      // this.y = 4 * sq(this.x) + this.x;
+      // display
 
-      // this.y += this.dy;
-
-  
+      // translate(width - 100, 150);
+      // translate(width/2, 150);
     }
     imageMode(CENTER);
     image(alienImage, this.x, this.y, 50, 50);
@@ -757,7 +758,7 @@ function createNewAliens() {
   // aliens.push(new Alien(width * 0.75, height / 2, "simple top-down"));
   // aliens.push(new Alien(50, 0, "tight-left zigzag"));
   // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
-  aliens.push(new Alien(width /2, 100, "circle thing"));
+  aliens.push(new Alien(width / 2, 300, "circle thing"));
 }
 
 //using millis to continously send waves of aliens over time
