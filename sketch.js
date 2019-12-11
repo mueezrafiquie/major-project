@@ -13,6 +13,9 @@
 //Global Variables
 
 //time variables
+
+
+
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
 
@@ -42,6 +45,7 @@ let direction = "right";
 
 //running score which will get reset when replayed
 let score = 0;
+let counter = 0;
 
 //Using the preload function to loading items before hand so there is no delay in displaying them
 function preload() {
@@ -138,7 +142,7 @@ function runEasyModeGame() {
 function runHardModeGame() {
   currentGameMode = "hard mode";
   //lowering time between waves to increase difficulty
-  timeBetweenWaves = 3000;
+  timeBetweenWaves = 250;
   runGame();
 }
 
@@ -589,6 +593,7 @@ function shoot() {
 
 function detectIfAlienHitByBulletAndDestroy() {
   if (shotType === "basic shot") {
+    
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
         //checking is a bullet hits an aliens hitbox
@@ -602,9 +607,14 @@ function detectIfAlienHitByBulletAndDestroy() {
           basicShot.splice(i, 1);
           aliens.splice(j, 1);
           //adding one to the score for every alien that is killed
+          counter += 1;
           score += 1;
           return;
         }
+        // if (counter = 2) {
+        //   aliens.splice(j, 1);
+        //   counter = 0;
+        // }
       }
     }
   }
@@ -672,6 +682,7 @@ class Alien {
     this.path = path;
     this.dx = 15;
     this.dy = 1;
+    this.theta = -91;
   }
 
   // //moving the individual alien according to difficulty
@@ -694,6 +705,7 @@ class Alien {
   // }
 
   moveIndividualAliens() {
+    push();
     if (this.path === "simple top-down") {
       // for (let i = aliens.length - 1; i >= 0; i--) {
       this.y += this.dy;
@@ -722,11 +734,10 @@ class Alien {
         this.dx *= -1;
       }
     } else if (this.path === "circle thing") {
-      let theta = -91;
-
-      this.x = cos(theta) * 1;
-      this.y = sin(theta) * 1;
-      theta -= 0.5;
+      
+      this.x = cos(this.theta) * 150;
+      this.y = (sin(this.theta) * 150);
+      this.theta -= 5
 
       // if (this.x > 50) {
       //   this.x = 50;
@@ -735,10 +746,12 @@ class Alien {
       // display
 
       // translate(width - 100, 150);
-      // translate(width/2, 150);
+      
+      translate(width/2, 200);
     }
     imageMode(CENTER);
     image(alienImage, this.x, this.y, 50, 50);
+    pop();
   }
 
   //creating a hitbox for an individual aliens
@@ -755,10 +768,10 @@ function createNewAliens() {
   for (i = 0; i <= 8; i++) {
     // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
   }
-  // aliens.push(new Alien(width * 0.75, height / 2, "simple top-down"));
+  // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
   // aliens.push(new Alien(50, 0, "tight-left zigzag"));
   // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
-  aliens.push(new Alien(width / 2, 300, "circle thing"));
+  aliens.push(new Alien(0, 0, "circle thing"));
 }
 
 //using millis to continously send waves of aliens over time
