@@ -357,7 +357,7 @@ function showScore() {
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
   textSize(80);
-  fill(0);
+  fill(255);
   text(score, width - 90, 90);
 }
 
@@ -745,9 +745,9 @@ class Alien {
 
       // display
 
-      // translate(width - 100, 150);
+      translate(this.x + width/2, this.y + width/2);
       
-      translate(width/2, 200);
+      // translate(width/2, 200);
     }
     imageMode(CENTER);
     image(alienImage, this.x, this.y, 50, 50);
@@ -770,8 +770,8 @@ function createNewAliens() {
   }
   // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
   // aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
-  aliens.push(new Alien(0, 0, "circle thing"));
+  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  // aliens.push(new Alien(0, 0, "circle thing"));
 }
 
 //using millis to continously send waves of aliens over time
