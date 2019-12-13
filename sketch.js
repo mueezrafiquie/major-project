@@ -142,7 +142,7 @@ function runEasyModeGame() {
 function runHardModeGame() {
   currentGameMode = "hard mode";
   //lowering time between waves to increase difficulty
-  timeBetweenWaves = 250;
+  timeBetweenWaves = 7000;
   runGame();
 }
 
@@ -745,7 +745,7 @@ class Alien {
 
       // display
 
-      translate(this.x + width/2, this.y + width/2);
+      translate(this.x + width/2, this.y + 300);
       
       // translate(width/2, 200);
     }
@@ -764,13 +764,23 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
+  let lastStager = 0 
   let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
+  let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
+
   for (i = 0; i <= 8; i++) {
     // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
+    aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
+
+    // aliens.push(new Alien(width * startingXPositions1[i], 0, "simple top-down"));
   }
+  // for (i = 0; i <= 8; i++) { 
+  //   aliens[i].path = "circle thing"
+
+  // }
   // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
   // aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
   // aliens.push(new Alien(0, 0, "circle thing"));
 }
 
@@ -778,6 +788,7 @@ function createNewAliens() {
 function sendAlienWaves() {
   if (millis() >= lastTimeWaveWasSent + timeBetweenWaves) {
     createNewAliens();
+
     moveAliens();
     lastTimeWaveWasSent = millis();
   }
