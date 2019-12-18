@@ -769,8 +769,8 @@ function createNewAliens() {
   let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
 
   for (i = 0; i <= 8; i++) {
-    // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
-    aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
+    aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
+    // aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
 
     // aliens.push(new Alien(width * startingXPositions1[i], 0, "simple top-down"));
   }
@@ -779,10 +779,24 @@ function createNewAliens() {
 
   // }
   // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
-  // aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  aliens.push(new Alien(50, 0, "tight-left zigzag"));
+  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
   // aliens.push(new Alien(0, 0, "circle thing"));
 }
+
+
+
+
+
+//create serperate time between wave numbers for different paths so that there are 
+//more things for zigzags and it's not so spaced out
+
+
+
+
+
+
+
 
 //using millis to continously send waves of aliens over time
 function sendAlienWaves() {
