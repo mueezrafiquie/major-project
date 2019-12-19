@@ -15,7 +15,7 @@ For the major project I will be creating an Alien Invasion style game. There wil
 - decent sound effects
 - a scoring system that tracks highscores and progression
 - "upgrades" that fall occasionally with aliens which change things like the type of bullet being shot,
-  strength or speed of plane
+strength or speed of plane
 - a different type of alien that  can also shoot at the player and also aliens that move toward the player wherever you go
 
 

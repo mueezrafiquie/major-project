@@ -19,8 +19,8 @@
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
 
-let singleWaveGap = 100;
-let spacerBetweenAliens = 0;
+let tbw = 1500;
+let ltwws;
 
 //plane variables
 let plane;
@@ -685,25 +685,6 @@ class Alien {
     this.theta = -91;
   }
 
-  // //moving the individual alien according to difficulty
-  // moveIndividualAliens() {
-  //   if (this.path === "simple top-down") {
-  //     let movementValue = 15;
-  //     for (let i = aliens.length - 1; i >= 0; i--) {
-  //       this.x = this.x + movementValue;
-  //       this.y = this.y + 0.5;
-  //       if (aliens[i].x + 50 > width) {
-  //         aliens.shift();
-  //         // gameMode = "game over";
-  //         // resetArrays();
-  //       }
-  //     }
-
-  //     imageMode(CENTER);
-  //     image(alienImage, this.x, this.y, 50, 50);
-  //   }
-  // }
-
   moveIndividualAliens() {
     push();
     if (this.path === "simple top-down") {
@@ -739,14 +720,7 @@ class Alien {
       this.y = (sin(this.theta) * 150);
       this.theta -= 5
 
-      // if (this.x > 50) {
-      //   this.x = 50;
-      // }
-
-      // display
-
       translate(this.x + width/2, this.y + 300);
-      
       // translate(width/2, 200);
     }
     imageMode(CENTER);
@@ -764,23 +738,30 @@ class Alien {
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
-  let lastStager = 0 
   let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
   let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
+  
+  
+  
+    for (i = 0; i <= 8; i++) {
+      aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
+    }
+    
 
-  for (i = 0; i <= 8; i++) {
-    aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
-    // aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
 
+    
+    // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
     // aliens.push(new Alien(width * startingXPositions1[i], 0, "simple top-down"));
-  }
-  // for (i = 0; i <= 8; i++) { 
+  
+  
+  
+    // for (i = 0; i <= 8; i++) { 
   //   aliens[i].path = "circle thing"
-
   // }
+
   // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
-  aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
+  // aliens.push(new Alien(50, 0, "tight-left zigzag"));
+  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
   // aliens.push(new Alien(0, 0, "circle thing"));
 }
 
@@ -825,4 +806,14 @@ function drawHitBox() {
   for (let i = aliens.length - 1; i >= 0; i--) {
     aliens[i].individualHitBox();
   }
+}
+
+
+class TwoHitAlien extends Alien {
+  constructor () {
+
+
+  }
+
+
 }
