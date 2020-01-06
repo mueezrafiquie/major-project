@@ -39,6 +39,7 @@ let currentGameMode;
 let basicShot = [];
 let doubleShot = [];
 let aliens = [];
+let twoHitAliens = [];
 
 let isShooting = false;
 let direction = "right";
@@ -593,6 +594,7 @@ function shoot() {
 
 function detectIfAlienHitByBulletAndDestroy() {
   if (shotType === "basic shot") {
+    isHit = false;
     
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
@@ -605,16 +607,14 @@ function detectIfAlienHitByBulletAndDestroy() {
         ) {
           //getting rid of aliens that are hit
           basicShot.splice(i, 1);
-          aliens.splice(j, 1);
+          // aliens.splice(j, 1);
           //adding one to the score for every alien that is killed
-          counter += 1;
           score += 1;
-          return;
+          return isHit = true;
         }
-        // if (counter = 2) {
-        //   aliens.splice(j, 1);
-        //   counter = 0;
-        // }
+        if (aliens[j].hitCounter === 2) {
+          aliens.splice(j, 1);
+        }
       }
     }
   }
@@ -673,6 +673,10 @@ function detectIfPlaneHitByAlien() {
   }
 }
 
+
+
+
+
 //creating a class to store basic information from which all aliens will be made
 class Alien {
   //sample alien coordinate values
@@ -681,7 +685,7 @@ class Alien {
     this.y = y;
     this.path = path;
     this.dx = 15;
-    this.dy = 1;
+    this.dy = 0.2;
     this.theta = -91;
   }
 
@@ -736,15 +740,36 @@ class Alien {
   }
 }
 
+
+class TwoHitAlien extends Alien {
+  constructor (x, y, path) {
+    super(x, y, path);
+    
+    this.hitCounter = 0;
+    super.moveIndividualAliens() 
+  }
+
+  howManyTimesHit () {
+    if (detectIfAlienHitByBulletAndDestroy()) {
+      this.hitCounter += 1;
+    }
+  }
+}
+
+
+
+
+
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
   let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
-  let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
+  // let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
   
   
   
     for (i = 0; i <= 8; i++) {
-      aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
+      // aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
+      aliens.push(new TwoHitAlien(width * startingXPositions[i], 50, "simple top-down"));
     }
     
 
@@ -809,11 +834,3 @@ function drawHitBox() {
 }
 
 
-class TwoHitAlien extends Alien {
-  constructor () {
-
-
-  }
-
-
-}
