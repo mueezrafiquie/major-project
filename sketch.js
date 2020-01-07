@@ -15,6 +15,7 @@
 //time variables
 
 
+let instructions;
 
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
@@ -58,6 +59,9 @@ function preload() {
   //loading sounds
   soundFormats("mp3");
   shootingSound = loadSound("assets/shootingsound.mp3");
+
+  levelToLoad = "assets/1.txt";
+  lines = loadStrings(levelToLoad);
 }
 
 //creating canvas and defining variables in setup()
@@ -77,6 +81,9 @@ function setup() {
   canPlaneMove = true;
   //setting a volume for shooting sound
   shootingSound.setVolume(0.2);
+
+
+  instructions = lines[0].split(" ")
 }
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
@@ -126,6 +133,9 @@ function runGame() {
 
   //drawing the plane image
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
+
+  
+  
 
   //these last two functions were used to help create the collision detection system but are not necessary for the game to run
   // drawHitBox();
@@ -594,7 +604,7 @@ function shoot() {
 
 function detectIfAlienHitByBulletAndDestroy() {
   if (shotType === "basic shot") {
-    isHit = false;
+    // isHit = false;
     
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
@@ -610,16 +620,17 @@ function detectIfAlienHitByBulletAndDestroy() {
           // aliens.splice(j, 1);
           //adding one to the score for every alien that is killed
           score += 1;
-          return isHit = true;
-        }
-        if (aliens[j].hitCounter === 2) {
-          aliens.splice(j, 1);
+          aliens[j].hitCounter += 1;
+          if (aliens[j].hitCounter === aliens[j].strength) {
+            aliens.splice(j, 1);
+          }
+          return 
         }
       }
     }
   }
 
-  // DOUBLE SHOT BULLETS CANNOT BE DETECTED YET THEY WILL NOT KILL THE ALIENS
+
   else if (shotType === "double shot") {
     for (let i = doubleShot.length - 1 - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
@@ -687,6 +698,8 @@ class Alien {
     this.dx = 15;
     this.dy = 0.2;
     this.theta = -91;
+    this.hitCounter = 0;
+    this.strength = 1;
   }
 
   moveIndividualAliens() {
@@ -740,25 +753,33 @@ class Alien {
   }
 }
 
-
 class TwoHitAlien extends Alien {
   constructor (x, y, path) {
     super(x, y, path);
-    
     this.hitCounter = 0;
-    super.moveIndividualAliens() 
-  }
-
-  howManyTimesHit () {
-    if (detectIfAlienHitByBulletAndDestroy()) {
-      this.hitCounter += 1;
-    }
+    this.strength = 2;
+    super.moveIndividualAliens() ;
   }
 }
 
 
 
 
+
+function readingTxtFile() {
+  aliens.push(new TwoHitAlien(instructions[0], instructions[1], instructions[2] + " " + instructions[3]))
+  moveAliens();
+}
+
+//using millis to continously send waves of aliens over time
+function sendAlienWaves() {
+  if (millis() >= lastTimeWaveWasSent + instructions[4]) {
+    readingTxtFile();
+
+    moveAliens();
+    lastTimeWaveWasSent = millis();
+  }
+}
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
@@ -769,7 +790,7 @@ function createNewAliens() {
   
     for (i = 0; i <= 8; i++) {
       // aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
-      aliens.push(new TwoHitAlien(width * startingXPositions[i], 50, "simple top-down"));
+      // aliens.push(new TwoHitAlien(width * startingXPositions[i], 50, "simple top-down"));
     }
     
 
@@ -794,25 +815,12 @@ function createNewAliens() {
 
 
 
-//create serperate time between wave numbers for different paths so that there are 
-//more things for zigzags and it's not so spaced out
 
 
 
 
 
 
-
-
-//using millis to continously send waves of aliens over time
-function sendAlienWaves() {
-  if (millis() >= lastTimeWaveWasSent + timeBetweenWaves) {
-    createNewAliens();
-
-    moveAliens();
-    lastTimeWaveWasSent = millis();
-  }
-}
 
 //looping through all the aliens created to apply the movement function to each of them
 function moveAliens() {
