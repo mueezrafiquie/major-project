@@ -1,1 +1,2 @@
-1500 10 simple top-down 1000 L1
+1500 50 simple top-down 7000 L1
+1300 50 simple top-down 1000 L1

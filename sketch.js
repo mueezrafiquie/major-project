@@ -60,8 +60,8 @@ function preload() {
   soundFormats("mp3");
   shootingSound = loadSound("assets/shootingsound.mp3");
 
-  levelToLoad = "assets/1.txt";
-  lines = loadStrings(levelToLoad);
+  level1Loading = "assets/1.txt";
+  level1Txt = loadStrings(level1Loading);
 }
 
 //creating canvas and defining variables in setup()
@@ -83,11 +83,45 @@ function setup() {
   shootingSound.setVolume(0.2);
 
 
-  instructions = lines[0].split(" ")
+
+
+}
+
+// function loadWave(whichFile) {
+//   for (let i = 0; i < whichFile.length; i++) {
+//     instructions = whichFile[i].split(" ")
+//       if (millis() <= int(instructions[4])) {
+//         aliens.push(new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]))
+//         // lastTimeWaveWasSent = millis();
+//     }
+//   }
+// }
+
+
+function loadWave(whichFile) {
+  for (let i = 0; i < whichFile.length; i++) {
+    instructions = whichFile[i].split(" ")
+      if (millis() >= lastTimeWaveWasSent + int(instructions[4])) {
+        let someAlien = new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]);
+        
+        window.setTimeout(aliens.push(someAlien), int(instructions[4]));
+        lastTimeWaveWasSent = millis();
+    }
+  }
+}
+
+
+
+function playLevel1() {
+  loadWave(level1Txt);
 }
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
 function draw() {
+
+  playLevel1();
+
+
   //using state variables to transition through different game screens and modes
   if (gameMode === "main menu") {
     showMenu();
@@ -124,7 +158,7 @@ function runGame() {
   shoot();
 
   //moving aliens down the screen in waves
-  sendAlienWaves();
+  // sendAlienWaves();
   moveAliens();
 
   //detecting if an alien is his by a bullet or if the plane is hit by and alien
@@ -135,12 +169,14 @@ function runGame() {
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
 
   
-  
+  // readingTxtFile();
 
   //these last two functions were used to help create the collision detection system but are not necessary for the game to run
   // drawHitBox();
   // drawPlaneHitBox();
 }
+
+
 
 //running easy version of game
 function runEasyModeGame() {
@@ -696,7 +732,7 @@ class Alien {
     this.y = y;
     this.path = path;
     this.dx = 15;
-    this.dy = 0.2;
+    this.dy = 1;
     this.theta = -91;
     this.hitCounter = 0;
     this.strength = 1;
@@ -765,21 +801,15 @@ class TwoHitAlien extends Alien {
 
 
 
-
 function readingTxtFile() {
-  aliens.push(new TwoHitAlien(instructions[0], instructions[1], instructions[2] + " " + instructions[3]))
+
+  aliens.push(new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]))
   moveAliens();
 }
 
-//using millis to continously send waves of aliens over time
-function sendAlienWaves() {
-  if (millis() >= lastTimeWaveWasSent + instructions[4]) {
-    readingTxtFile();
 
-    moveAliens();
-    lastTimeWaveWasSent = millis();
-  }
-}
+
+
 
 //pushing alien values into the aliens array to be created
 function createNewAliens() {
