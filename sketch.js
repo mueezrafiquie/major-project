@@ -16,6 +16,7 @@
 
 
 let instructions;
+let someAlien
 
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
@@ -35,6 +36,9 @@ let scalar = 0.2;
 let shotType = "basic shot";
 let gameMode = "hard mode";
 let currentGameMode;
+
+
+let levelMode = "start of level 1"
 
 //arrays to store the data from the objects being used to push information into them
 let basicShot = [];
@@ -101,13 +105,19 @@ function setup() {
 function loadWave(whichFile) {
   for (let i = 0; i < whichFile.length; i++) {
     instructions = whichFile[i].split(" ")
-      if (millis() >= lastTimeWaveWasSent + int(instructions[4])) {
-        let someAlien = new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]);
-        
-        window.setTimeout(aliens.push(someAlien), int(instructions[4]));
-        lastTimeWaveWasSent = millis();
+    if(instructions[0] === "regular" ){
+      someAlien = new Alien(int(instructions[1]), int(instructions[2]), instructions[3] + " " + instructions[4]);
+      window.setTimeout(pushingAliensOrSomething, int(instructions[5]), someAlien)
+    }
+    else if (instructions[0] === "twohit") {
+      someAlien = new TwoHitAlien(int(instructions[1]), int(instructions[2]), instructions[3] + " " + instructions[4]);
+      window.setTimeout(pushingAliensOrSomething, int(instructions[5]), someAlien)
     }
   }
+}
+
+function pushingAliensOrSomething(whichAlien) {
+    aliens.push(whichAlien);
 }
 
 
@@ -118,8 +128,10 @@ function playLevel1() {
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
 function draw() {
-
-  playLevel1();
+  if (levelMode === "start of level 1") {
+    playLevel1();
+    levelMode = "during level 1"
+  }
 
 
   //using state variables to transition through different game screens and modes
@@ -796,15 +808,6 @@ class TwoHitAlien extends Alien {
     this.strength = 2;
     super.moveIndividualAliens() ;
   }
-}
-
-
-
-
-function readingTxtFile() {
-
-  aliens.push(new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]))
-  moveAliens();
 }
 
 
