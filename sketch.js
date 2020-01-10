@@ -13,7 +13,8 @@
 //Global Variables
 
 //time variables
-
+let upgradeX;
+let upgradeY;
 
 let instructions;
 let someAlien
@@ -59,11 +60,13 @@ function preload() {
   plane = loadImage("assets/plane.png");
   background1 = loadImage("assets/background1.png");
   alienImage = loadImage("assets/alien.png");
+  bulletUpgradeImage = loadImage("assets/bulletupgrade.png");
 
   //loading sounds
   soundFormats("mp3");
   shootingSound = loadSound("assets/shootingsound.mp3");
 
+  //loading txt file to be converted into a level
   level1Loading = "assets/1.txt";
   level1Txt = loadStrings(level1Loading);
 }
@@ -75,8 +78,9 @@ function setup() {
 
   angleMode(DEGREES);
 
-  //pushing the starting aliens into the aliens array
-  createNewAliens();
+
+  upgradeX = width/2
+  upgradeY = height/2
 
   //defining variables
   lastTimeWaveWasSent = 0;
@@ -85,22 +89,7 @@ function setup() {
   canPlaneMove = true;
   //setting a volume for shooting sound
   shootingSound.setVolume(0.2);
-
-
-
-
 }
-
-// function loadWave(whichFile) {
-//   for (let i = 0; i < whichFile.length; i++) {
-//     instructions = whichFile[i].split(" ")
-//       if (millis() <= int(instructions[4])) {
-//         aliens.push(new TwoHitAlien(int(instructions[0]), int(instructions[1]), instructions[2] + " " + instructions[3]))
-//         // lastTimeWaveWasSent = millis();
-//     }
-//   }
-// }
-
 
 function loadWave(whichFile) {
   for (let i = 0; i < whichFile.length; i++) {
@@ -113,6 +102,9 @@ function loadWave(whichFile) {
       someAlien = new TwoHitAlien(int(instructions[1]), int(instructions[2]), instructions[3] + " " + instructions[4]);
       window.setTimeout(pushingAliensOrSomething, int(instructions[5]), someAlien)
     }
+    else if (instructions[0] === "bulletupgrade") {
+      window.setInterval(sendBulletUpgrade, instructions[1]);
+    }
   }
 }
 
@@ -120,20 +112,29 @@ function pushingAliensOrSomething(whichAlien) {
     aliens.push(whichAlien);
 }
 
-
-
 function playLevel1() {
   loadWave(level1Txt);
+}
+
+function sendBulletUpgrade() {
+
+  let upgradeDy = 1;
+
+  upgradeY += upgradeDy;
+
+
+ 
 }
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
 function draw() {
   if (levelMode === "start of level 1") {
     playLevel1();
+
     levelMode = "during level 1"
   }
 
-
+  
   //using state variables to transition through different game screens and modes
   if (gameMode === "main menu") {
     showMenu();
@@ -159,8 +160,9 @@ function windowResized() {
 //combining all the function necessary to run the game
 function runGame() {
   //drawing background
+  imageMode(CENTER)
   image(background1, 0, 0, width * 2, height * 2);
-
+  sendBulletUpgrade()
   //displays score
   showScore();
 
@@ -169,20 +171,20 @@ function runGame() {
   createContinousShots();
   shoot();
 
-  //moving aliens down the screen in waves
-  // sendAlienWaves();
+
   moveAliens();
 
   //detecting if an alien is his by a bullet or if the plane is hit by and alien
   detectIfAlienHitByBulletAndDestroy();
   detectIfPlaneHitByAlien();
-
+  
   //drawing the plane image
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
 
-  
-  // readingTxtFile();
+  image(bulletUpgradeImage, upgradeX, upgradeY,  30, 30);
 
+  
+  
   //these last two functions were used to help create the collision detection system but are not necessary for the game to run
   // drawHitBox();
   // drawPlaneHitBox();
@@ -733,9 +735,6 @@ function detectIfPlaneHitByAlien() {
 }
 
 
-
-
-
 //creating a class to store basic information from which all aliens will be made
 class Alien {
   //sample alien coordinate values
@@ -809,50 +808,6 @@ class TwoHitAlien extends Alien {
     super.moveIndividualAliens() ;
   }
 }
-
-
-
-
-
-//pushing alien values into the aliens array to be created
-function createNewAliens() {
-  let startingXPositions = [0.4, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05];
-  // let startingXPositions1 = [0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.4, 0.35];
-  
-  
-  
-    for (i = 0; i <= 8; i++) {
-      // aliens.push(new Alien(width * startingXPositions[i], 50, "simple top-down"));
-      // aliens.push(new TwoHitAlien(width * startingXPositions[i], 50, "simple top-down"));
-    }
-    
-
-
-    
-    // aliens.push(new Alien(width * startingXPositions[i], -19, "simple zigzag"));
-    // aliens.push(new Alien(width * startingXPositions1[i], 0, "simple top-down"));
-  
-  
-  
-    // for (i = 0; i <= 8; i++) { 
-  //   aliens[i].path = "circle thing"
-  // }
-
-  // aliens.push(new Alien(width * 0.75, 50, "simple top-down"));
-  // aliens.push(new Alien(50, 0, "tight-left zigzag"));
-  // aliens.push(new Alien(width - 370, 0, "tight-right zigzag"));
-  // aliens.push(new Alien(0, 0, "circle thing"));
-}
-
-
-
-
-
-
-
-
-
-
 
 
 //looping through all the aliens created to apply the movement function to each of them

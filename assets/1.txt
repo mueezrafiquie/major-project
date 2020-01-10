@@ -1,12 +1,22 @@
-twohit 1320 50 simple top-down 1000
-twohit 1260 50 simple top-down 1000
-twohit 1200 50 simple top-down 1000 
-twohit 1140 50 simple top-down 1000 
-twohit 1080 50 simple top-down 1000 
-twohit 1020 50 simple top-down 1000 
-twohit 960 50 simple top-down 1000 
-twohit 900 50 simple top-down 1000 
-twohit 480 50 simple top-down 1000 
+twohit 1320 0 simple top-down 1000
+twohit 1260 0 simple top-down 1000
+twohit 1200 0 simple top-down 1000 
+twohit 1140 0 simple top-down 1000 
+twohit 1080 0 simple top-down 1000 
+twohit 1020 0 simple top-down 1000 
+twohit 960 0 simple top-down 1000 
+twohit 900 0 simple top-down 1000 
+
+twohit 780 -50 simple top-down 1000 
+twohit 720 -50 simple top-down 1000
+twohit 660 -50 simple top-down 1000
+
+twohit 1440 -50 simple top-down 1000
+twohit 1500 -50 simple top-down 1000
+twohit 1560 -50 simple top-down 1000
+
+
 
 regular 1800 50 tight-right zigzag 5000
 regular 1750 0 tight-right zigzag 5000
+
