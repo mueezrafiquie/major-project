@@ -7,11 +7,11 @@ twohit 1020 0 simple top-down 1000
 twohit 960 0 simple top-down 1000 
 twohit 900 0 simple top-down 1000 
 
-twohit 780 -50 simple top-down 1000 
+
 twohit 720 -50 simple top-down 1000
 twohit 660 -50 simple top-down 1000
 
-twohit 1440 -50 simple top-down 1000
+
 twohit 1500 -50 simple top-down 1000
 twohit 1560 -50 simple top-down 1000
 
@@ -20,3 +20,8 @@ twohit 1560 -50 simple top-down 1000
 regular 1800 50 tight-right zigzag 5000
 regular 1750 0 tight-right zigzag 5000
 
+
+
+
+twohit 1440 -50 simple top-down 1000000
+twohit 780 -50 simple top-down 1000000

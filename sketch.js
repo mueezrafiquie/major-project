@@ -117,13 +117,8 @@ function playLevel1() {
 }
 
 function sendBulletUpgrade() {
-
   let upgradeDy = 1;
-
   upgradeY += upgradeDy;
-
-
- 
 }
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
@@ -828,5 +823,3 @@ function drawHitBox() {
     aliens[i].individualHitBox();
   }
 }
-
-
