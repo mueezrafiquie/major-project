@@ -17,7 +17,7 @@ let upgradeX;
 let upgradeY;
 
 let instructions;
-let someAlien
+let someAlien;
 
 let timeBetweenWaves;
 let lastTimeWaveWasSent;
@@ -38,8 +38,7 @@ let shotType = "basic shot";
 let gameMode = "hard mode";
 let currentGameMode;
 
-
-let levelMode = "start of level 1"
+let levelMode = "start of level 1";
 
 //arrays to store the data from the objects being used to push information into them
 let basicShot = [];
@@ -78,9 +77,8 @@ function setup() {
 
   angleMode(DEGREES);
 
-
-  upgradeX = width/2
-  upgradeY = height/2
+  upgradeX = width / 2;
+  upgradeY = height / 2;
 
   //defining variables
   lastTimeWaveWasSent = 0;
@@ -93,23 +91,37 @@ function setup() {
 
 function loadWave(whichFile) {
   for (let i = 0; i < whichFile.length; i++) {
-    instructions = whichFile[i].split(" ")
-    if(instructions[0] === "regular" ){
-      someAlien = new Alien(int(instructions[1]), int(instructions[2]), instructions[3] + " " + instructions[4]);
-      window.setTimeout(pushingAliensOrSomething, int(instructions[5]), someAlien)
-    }
-    else if (instructions[0] === "twohit") {
-      someAlien = new TwoHitAlien(int(instructions[1]), int(instructions[2]), instructions[3] + " " + instructions[4]);
-      window.setTimeout(pushingAliensOrSomething, int(instructions[5]), someAlien)
-    }
-    else if (instructions[0] === "bulletupgrade") {
+    instructions = whichFile[i].split(" ");
+    if (instructions[0] === "regular") {
+      someAlien = new Alien(
+        int(instructions[1]),
+        int(instructions[2]),
+        instructions[3] + " " + instructions[4]
+      );
+      window.setTimeout(
+        pushingAliensOrSomething,
+        int(instructions[5]),
+        someAlien
+      );
+    } else if (instructions[0] === "twohit") {
+      someAlien = new TwoHitAlien(
+        int(instructions[1]),
+        int(instructions[2]),
+        instructions[3] + " " + instructions[4]
+      );
+      window.setTimeout(
+        pushingAliensOrSomething,
+        int(instructions[5]),
+        someAlien
+      );
+    } else if (instructions[0] === "bulletupgrade") {
       window.setInterval(sendBulletUpgrade, instructions[1]);
     }
   }
 }
 
 function pushingAliensOrSomething(whichAlien) {
-    aliens.push(whichAlien);
+  aliens.push(whichAlien);
 }
 
 function playLevel1() {
@@ -126,10 +138,9 @@ function draw() {
   if (levelMode === "start of level 1") {
     playLevel1();
 
-    levelMode = "during level 1"
+    levelMode = "during level 1";
   }
 
-  
   //using state variables to transition through different game screens and modes
   if (gameMode === "main menu") {
     showMenu();
@@ -155,9 +166,9 @@ function windowResized() {
 //combining all the function necessary to run the game
 function runGame() {
   //drawing background
-  imageMode(CENTER)
+  imageMode(CENTER);
   image(background1, 0, 0, width * 2, height * 2);
-  sendBulletUpgrade()
+  sendBulletUpgrade();
   //displays score
   showScore();
 
@@ -166,26 +177,23 @@ function runGame() {
   createContinousShots();
   shoot();
 
-
   moveAliens();
 
   //detecting if an alien is his by a bullet or if the plane is hit by and alien
   detectIfAlienHitByBulletAndDestroy();
   detectIfPlaneHitByAlien();
-  
+
   //drawing the plane image
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
 
-  image(bulletUpgradeImage, upgradeX, upgradeY,  30, 30);
+  image(bulletUpgradeImage, upgradeX, upgradeY, 30, 30);
 
-  
-  
   //these last two functions were used to help create the collision detection system but are not necessary for the game to run
-  // drawHitBox();
-  // drawPlaneHitBox();
+  drawHitBox();
+  drawPlaneHitBox();
+  drawUpgradeHitBox();
+  detectIfUpgradeCollected();
 }
-
-
 
 //running easy version of game
 function runEasyModeGame() {
@@ -650,7 +658,7 @@ function shoot() {
 function detectIfAlienHitByBulletAndDestroy() {
   if (shotType === "basic shot") {
     // isHit = false;
-    
+
     for (let i = basicShot.length - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
         //checking is a bullet hits an aliens hitbox
@@ -669,14 +677,11 @@ function detectIfAlienHitByBulletAndDestroy() {
           if (aliens[j].hitCounter === aliens[j].strength) {
             aliens.splice(j, 1);
           }
-          return 
+          return;
         }
       }
     }
-  }
-
-
-  else if (shotType === "double shot") {
+  } else if (shotType === "double shot") {
     for (let i = doubleShot.length - 1 - 1; i >= 0; i--) {
       for (let j = aliens.length - 1; j >= 0; j--) {
         if (
@@ -700,8 +705,46 @@ function detectIfAlienHitByBulletAndDestroy() {
 //draws a hitbox around the palne
 function drawPlaneHitBox() {
   fill(255);
-  rect(planeX - 20 * scalar, planeY - 190 * scalar, 40 * scalar, 250 * scalar);
+  rectMode(CORNER);
+  rect(planeX - 45 * scalar, planeY - 190 * scalar, 95 * scalar, 250 * scalar);
   rect(planeX - 125 * scalar, planeY + 1 * scalar, 255 * scalar, 200 * scalar);
+}
+
+function drawUpgradeHitBox() {
+  ellipseMode(CENTER);
+  if (detectIfUpgradeCollected()) {
+    fill(0, 255, 0);
+    ellipse(upgradeX, upgradeY, 30);
+  } else {
+    fill(255);
+    ellipse(upgradeX, upgradeY, 30);
+  }
+}
+
+function detectIfUpgradeCollected() {
+  if (
+    collideRectCircle(
+      planeX - 45 * scalar,
+      planeY - 190 * scalar,
+      95 * scalar,
+      250 * scalar,
+      upgradeX,
+      upgradeY,
+      30
+    ) ||
+    collideRectCircle(
+      (planeX - 125 * scalar,
+      planeY + 1 * scalar,
+      255 * scalar,
+      200 * scalar,
+      upgradeX,
+      upgradeY,
+      30)
+    )
+  ) {
+    console.log("upi");
+    return true;
+  }
 }
 
 //detects if the plane is hit by an alien by comparing the hitboxes of both
@@ -728,7 +771,6 @@ function detectIfPlaneHitByAlien() {
     }
   }
 }
-
 
 //creating a class to store basic information from which all aliens will be made
 class Alien {
@@ -774,12 +816,11 @@ class Alien {
         this.dx *= -1;
       }
     } else if (this.path === "circle thing") {
-      
       this.x = cos(this.theta) * 150;
-      this.y = (sin(this.theta) * 150);
-      this.theta -= 5
+      this.y = sin(this.theta) * 150;
+      this.theta -= 5;
 
-      translate(this.x + width/2, this.y + 300);
+      translate(this.x + width / 2, this.y + 300);
       // translate(width/2, 200);
     }
     imageMode(CENTER);
@@ -796,14 +837,13 @@ class Alien {
 }
 
 class TwoHitAlien extends Alien {
-  constructor (x, y, path) {
+  constructor(x, y, path) {
     super(x, y, path);
     this.hitCounter = 0;
     this.strength = 2;
-    super.moveIndividualAliens() ;
+    super.moveIndividualAliens();
   }
 }
-
 
 //looping through all the aliens created to apply the movement function to each of them
 function moveAliens() {
