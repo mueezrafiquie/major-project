@@ -137,6 +137,7 @@ function sendBulletUpgrade() {
 function draw() {
   if (levelMode === "start of level 1") {
     playLevel1();
+    console.log(windowWidth)
 
     levelMode = "during level 1";
   }
@@ -704,21 +705,21 @@ function detectIfAlienHitByBulletAndDestroy() {
 
 //draws a hitbox around the palne
 function drawPlaneHitBox() {
-  fill(255);
-  rectMode(CORNER);
-  rect(planeX - 45 * scalar, planeY - 190 * scalar, 95 * scalar, 250 * scalar);
-  rect(planeX - 125 * scalar, planeY + 1 * scalar, 255 * scalar, 200 * scalar);
+  // fill(255);
+  // rectMode(CORNER);
+  // rect(planeX - 45 * scalar, planeY - 190 * scalar, 95 * scalar, 250 * scalar);
+  // rect(planeX - 125 * scalar, planeY + 1 * scalar, 255 * scalar, 200 * scalar);
 }
 
 function drawUpgradeHitBox() {
-  ellipseMode(CENTER);
-  if (detectIfUpgradeCollected()) {
-    fill(0, 255, 0);
-    ellipse(upgradeX, upgradeY, 30);
-  } else {
-    fill(255);
-    ellipse(upgradeX, upgradeY, 30);
-  }
+  // ellipseMode(CENTER);
+  // if (detectIfUpgradeCollected()) {
+  //   fill(0, 255, 0);
+  //   ellipse(upgradeX, upgradeY, 30);
+  // } else {
+  //   fill(255);
+  //   ellipse(upgradeX, upgradeY, 30);
+  // }
 }
 
 function detectIfUpgradeCollected() {
@@ -742,8 +743,14 @@ function detectIfUpgradeCollected() {
       30)
     )
   ) {
-    console.log("upi");
     return true;
+  }
+}
+
+function upgradeBullet() {
+  if (detectIfUpgradeCollected()) {
+  
+  
   }
 }
 
@@ -800,7 +807,7 @@ class Alien {
     } else if (this.path === "simple zigzag") {
       this.x += this.dx;
       this.y += this.dy;
-      if (this.x >= width - 100 || this.x <= 25) {
+      if (this.x >= width - 40 || this.x <= 25) {
         this.dx *= -1;
       }
     } else if (this.path === "tight-left zigzag") {
