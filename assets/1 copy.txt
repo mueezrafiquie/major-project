@@ -1,0 +1,121 @@
+regular 780 -50 simple top-down 0 
+regular 840 -50 simple top-down 0 
+regular 900 -50 simple top-down 0 
+regular 960 -50 simple top-down 0 
+regular 1020 -50 simple top-down 0 
+regular 1080 -50 simple top-down 0 
+regular 1140 -50 simple top-down 0 
+
+regular 1140 -50 simple top-down 5000
+regular 1200 -50 simple top-down 5000
+regular 1260 -50 simple top-down 5000
+regular 1320 -50 simple top-down 5000
+regular 1380 -50 simple top-down 5000
+
+regular 780 -50 simple top-down 5000 
+regular 720 -50 simple top-down 5000 
+regular 660 -50 simple top-down 5000 
+regular 600 -50 simple top-down 5000 
+regular 540 -50 simple top-down 5000
+
+regular 840 -50 simple top-down 12000 
+regular 900 -50 simple top-down 12000 
+regular 960 -50 simple top-down 12000 
+regular 1020 -50 simple top-down 12000 
+regular 1080 -50 simple top-down 12000 
+
+regular 50 -50 simple top-down 12000
+regular 110 -50 simple top-down 12000
+regular 1860 -50 simple top-down 12000 
+regular 1800 -50 simple top-down 12000
+
+regular 50 -50 simple zigzag 18000
+regular 50 -50 simple zigzag 19600
+regular 50 -50 simple zigzag 20200
+regular 50 -50 simple zigzag 20800
+regular 50 -50 simple zigzag 21400
+regular 50 -50 simple zigzag 22000
+regular 50 -50 simple zigzag 22600
+regular 50 -50 simple zigzag 23200
+regular 50 -50 simple zigzag 23800
+regular 50 -50 simple zigzag 24400
+regular 50 -50 simple zigzag 25000
+regular 50 -50 simple zigzag 25600
+
+regular 1800 -50 tight-right zigzag 30000
+regular 1800 -50 tight-right zigzag 30500
+regular 1800 -50 tight-right zigzag 31000
+regular 1800 -50 tight-right zigzag 31500
+regular 1800 -50 tight-right zigzag 32000
+regular 1800 -50 tight-right zigzag 32500
+regular 1800 -50 tight-right zigzag 33000
+regular 1800 -50 tight-right zigzag 33500
+regular 1800 -50 tight-right zigzag 34000
+
+regular 120 -50 tight-left zigzag 30000
+regular 120 -50 tight-left zigzag 30500
+regular 120 -50 tight-left zigzag 31000
+regular 120 -50 tight-left zigzag 31500
+regular 120 -50 tight-left zigzag 32000
+regular 120 -50 tight-left zigzag 32500
+regular 120 -50 tight-left zigzag 33000
+regular 120 -50 tight-left zigzag 33500
+regular 120 -50 tight-left zigzag 34000
+
+regular 720 -50 simple top-down 35000 
+regular 780 -100 simple top-down 35000 
+regular 840 -50 simple top-down 35000 
+regular 900 -100 simple top-down 35000 
+regular 960 -50 simple top-down 35000 
+regular 1020 -100 simple top-down 35000 
+regular 1080 -50 simple top-down 35000 
+regular 1140 -100 simple top-down 35000 
+regular 1200 -50 simple top-down 35000 
+
+regular 600 -50 simple top-down 39000 
+regular 660 -100 simple top-down 39000 
+regular 720 -50 simple top-down 39000 
+regular 780 -100 simple top-down 39000 
+regular 840 -50 simple top-down 39000 
+
+regular 1080 -50 simple top-down 39000 
+regular 1140 -100 simple top-down 39000 
+regular 1200 -50 simple top-down 39000 
+regular 1260 -100 simple top-down 39000 
+regular 1320 -50 simple top-down 39000 
+
+regular 360 -50 simple top-down 41500 
+regular 420 -100 simple top-down 41500 
+regular 480 -50 simple top-down 41500 
+regular 540 -100 simple top-down 41500 
+regular 600 -50 simple top-down 41500 
+regular 660 -100 simple top-down 41500 
+regular 720 -50 simple top-down 41500 
+
+regular 1260 -100 simple top-down 41500 
+regular 1320 -50 simple top-down 41500 
+regular 1380 -100 simple top-down 41500
+regular 1440 -50 simple top-down 41500 
+regular 1500 -100 simple top-down 41500 
+regular 1560 -50 simple top-down 41500  
+regular 1620 -100 simple top-down 41500 
+
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+regular 1800 -50 tight-right zigzag 45000
+
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
+regular 120 -50 tight-left zigzag 45000
