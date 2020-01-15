@@ -15,6 +15,7 @@
 //time variables
 let upgradeX;
 let upgradeY;
+let showUpgrade = true;
 
 let instructions;
 let someAlien;
@@ -35,6 +36,7 @@ let scalar = 0.2;
 //state variables: one that changes the type of bullets the plane shoots and the other
 //which switches the game between screens
 let shotType = "basic shot";
+let firingType = "basic"
 let gameMode = "hard mode";
 let currentGameMode;
 
@@ -77,8 +79,8 @@ function setup() {
 
   angleMode(DEGREES);
 
-  upgradeX = width / 2;
-  upgradeY = height / 2;
+  // upgradeX = 1000
+  // upgradeY = 50
 
   //defining variables
   lastTimeWaveWasSent = 0;
@@ -115,7 +117,11 @@ function loadWave(whichFile) {
         someAlien
       );
     } else if (instructions[0] === "bulletupgrade") {
-      window.setInterval(sendBulletUpgrade, instructions[1]);
+      window.setTimeout(originalUpdradeStartPoint,
+                        int(instructions[3]),
+                        int(instructions[1]),
+                        int(instructions[2])
+      );
     }
   }
 }
@@ -126,18 +132,25 @@ function pushingAliensOrSomething(whichAlien) {
 
 function playLevel1() {
   loadWave(level1Txt);
+  
 }
 
-function sendBulletUpgrade() {
+function originalUpdradeStartPoint(startX, startY) {
+  upgradeX = startX
+  upgradeY = startY
+}
+
+
+function moveBulletUpgrade() {
   let upgradeDy = 1;
   upgradeY += upgradeDy;
+
 }
 
 //all put inside the draw loop so it is constantly being drawn keeps responding when input is continously given
 function draw() {
   if (levelMode === "start of level 1") {
     playLevel1();
-    console.log(windowWidth)
 
     levelMode = "during level 1";
   }
@@ -169,7 +182,9 @@ function runGame() {
   //drawing background
   imageMode(CENTER);
   image(background1, 0, 0, width * 2, height * 2);
-  sendBulletUpgrade();
+  moveBulletUpgrade();
+  upgradeBullet();
+  
   //displays score
   showScore();
 
@@ -183,17 +198,23 @@ function runGame() {
   //detecting if an alien is his by a bullet or if the plane is hit by and alien
   detectIfAlienHitByBulletAndDestroy();
   detectIfPlaneHitByAlien();
-
+  
   //drawing the plane image
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
-
-  image(bulletUpgradeImage, upgradeX, upgradeY, 30, 30);
+  displayBullet();
 
   //these last two functions were used to help create the collision detection system but are not necessary for the game to run
   drawHitBox();
   drawPlaneHitBox();
   drawUpgradeHitBox();
   detectIfUpgradeCollected();
+}
+
+function displayBullet() {
+  if (showUpgrade) {
+    image(bulletUpgradeImage, upgradeX, upgradeY, 30, 30);
+  }
+
 }
 
 //running easy version of game
@@ -519,6 +540,7 @@ function resetArrays() {
   aliens = [];
 }
 
+
 //allowing plane to shoot
 function keyPressed() {
   if (keyCode === 32 && shotType === "basic shot") {
@@ -541,11 +563,30 @@ function keyPressed() {
       dy: -5
     };
     doubleShot.push(doubleShotValues);
-  }
-
-  if (shotType === "basic-continuous shot") {
+  } else if (firingType === "continuous") {
     if (keyCode === 32) {
       isShooting = true;
+      if (shotType === "basic shot") {
+        shootingSound.play();
+        let basicShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        basicShot.push(basicShotValues);
+        shootBasicShot()
+      } else if (shotType === "double shot") {
+        shootingSound.play();
+        let doubleShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        doubleShot.push(doubleShotValues);
+        shootDoubleShot()
+      }
     }
   }
 
@@ -572,32 +613,32 @@ function keyReleased() {
 }
 
 function createContinousShots() {
-  //creating objects in which information about the bullets is stored to be pushed into arrays
-  if (keyIsDown) {
-    if (frameCount % 8 === 0) {
-      if (isShooting && shotType === "basic shot") {
-        //playing sound and created the object for the basic shot
-        shootingSound.play();
-        let basicShotValues = {
-          x: planeX,
-          y: planeY - 210 * scalar,
-          r: 5,
-          dy: -5
-        };
-        basicShot.push(basicShotValues);
-      } else if (isShooting && shotType === "double shot") {
-        //playing sound and created the object for the double shot
-        shootingSound.play();
-        let doubleShotValues = {
-          x: planeX,
-          y: planeY - 210 * scalar,
-          r: 5,
-          dy: -5
-        };
-        doubleShot.push(doubleShotValues);
-      }
-    }
-  }
+  // //creating objects in which information about the bullets is stored to be pushed into arrays
+  // if (keyIsDown) {
+  //   if (frameCount % 8 === 0) {
+  //     if (isShooting && shotType === "basic shot") {
+  //       //playing sound and created the object for the basic shot
+  //       shootingSound.play();
+  //       let basicShotValues = {
+  //         x: planeX,
+  //         y: planeY - 210 * scalar,
+  //         r: 5,
+  //         dy: -5
+  //       };
+  //       basicShot.push(basicShotValues);
+  //     } else if (isShooting && shotType === "double shot") {
+  //       //playing sound and created the object for the double shot
+  //       shootingSound.play();
+  //       let doubleShotValues = {
+  //         x: planeX,
+  //         y: planeY - 210 * scalar,
+  //         r: 5,
+  //         dy: -5
+  //       };
+  //       doubleShot.push(doubleShotValues);
+  //     }
+  //   }
+  // }
 }
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
@@ -749,8 +790,9 @@ function detectIfUpgradeCollected() {
 
 function upgradeBullet() {
   if (detectIfUpgradeCollected()) {
-  
-  
+    firingType = "continuous";
+    showUpgrade = false;
+    
   }
 }
 
@@ -846,7 +888,6 @@ class Alien {
 class TwoHitAlien extends Alien {
   constructor(x, y, path) {
     super(x, y, path);
-    this.hitCounter = 0;
     this.strength = 2;
     super.moveIndividualAliens();
   }
