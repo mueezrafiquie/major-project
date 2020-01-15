@@ -52,7 +52,7 @@ regular 1800 -50 tight-right zigzag 33000
 regular 1800 -50 tight-right zigzag 33500
 regular 1800 -50 tight-right zigzag 34000
 
-bulletupgrade 900 50 32000
+bulletupgrade 900 50 0
 
 regular 120 -50 tight-left zigzag 30000
 regular 120 -50 tight-left zigzag 30500

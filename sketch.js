@@ -564,30 +564,30 @@ function keyPressed() {
     };
     doubleShot.push(doubleShotValues);
   } else if (firingType === "continuous") {
-    if (keyCode === 32) {
-      isShooting = true;
-      if (shotType === "basic shot") {
-        shootingSound.play();
-        let basicShotValues = {
-          x: planeX,
-          y: planeY - 210 * scalar,
-          r: 5,
-          dy: -5
-        };
-        basicShot.push(basicShotValues);
-        shootBasicShot()
-      } else if (shotType === "double shot") {
-        shootingSound.play();
-        let doubleShotValues = {
-          x: planeX,
-          y: planeY - 210 * scalar,
-          r: 5,
-          dy: -5
-        };
-        doubleShot.push(doubleShotValues);
-        shootDoubleShot()
-      }
-    }
+    isShooting = true;
+    // if (keyCode === 32) {
+    //   if (shotType === "basic shot") {
+    //     shootingSound.play();
+    //     let basicShotValues = {
+    //       x: planeX,
+    //       y: planeY - 210 * scalar,
+    //       r: 5,
+    //       dy: -5
+    //     };
+    //     basicShot.push(basicShotValues);
+    //     shootBasicShot()
+    //   } else if (shotType === "double shot") {
+    //     shootingSound.play();
+    //     let doubleShotValues = {
+    //       x: planeX,
+    //       y: planeY - 210 * scalar,
+    //       r: 5,
+    //       dy: -5
+    //     };
+    //     doubleShot.push(doubleShotValues);
+    //     shootDoubleShot()
+    //   }
+    // }
   }
 
   //allowing you to switch between shot types
@@ -613,32 +613,32 @@ function keyReleased() {
 }
 
 function createContinousShots() {
-  // //creating objects in which information about the bullets is stored to be pushed into arrays
-  // if (keyIsDown) {
-  //   if (frameCount % 8 === 0) {
-  //     if (isShooting && shotType === "basic shot") {
-  //       //playing sound and created the object for the basic shot
-  //       shootingSound.play();
-  //       let basicShotValues = {
-  //         x: planeX,
-  //         y: planeY - 210 * scalar,
-  //         r: 5,
-  //         dy: -5
-  //       };
-  //       basicShot.push(basicShotValues);
-  //     } else if (isShooting && shotType === "double shot") {
-  //       //playing sound and created the object for the double shot
-  //       shootingSound.play();
-  //       let doubleShotValues = {
-  //         x: planeX,
-  //         y: planeY - 210 * scalar,
-  //         r: 5,
-  //         dy: -5
-  //       };
-  //       doubleShot.push(doubleShotValues);
-  //     }
-  //   }
-  // }
+  // creating objects in which information about the bullets is stored to be pushed into arrays
+  if (keyIsDown) {
+    if (frameCount % 8 === 0) {
+      if (isShooting && shotType === "basic shot") {
+        //playing sound and created the object for the basic shot
+        shootingSound.play();
+        let basicShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        basicShot.push(basicShotValues);
+      } else if (isShooting && shotType === "double shot") {
+        //playing sound and created the object for the double shot
+        shootingSound.play();
+        let doubleShotValues = {
+          x: planeX,
+          y: planeY - 210 * scalar,
+          r: 5,
+          dy: -5
+        };
+        doubleShot.push(doubleShotValues);
+      }
+    }
+  }
 }
 
 //looping through the basicShot array to create a bullet for every value entered when the space key is hit
