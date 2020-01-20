@@ -40,7 +40,7 @@ let firingType = "basic"
 let gameMode = "hard mode";
 let currentGameMode;
 
-let levelMode = "start of level 1";
+let levelMode = "start of level 2";
 
 //arrays to store the data from the objects being used to push information into them
 let basicShot = [];
@@ -61,6 +61,7 @@ function preload() {
   plane = loadImage("assets/plane.png");
   background1 = loadImage("assets/background1.png");
   alienImage = loadImage("assets/alien.png");
+  twoHitAlienImage = loadImage("assets/twohitalien.png");
   bulletUpgradeImage = loadImage("assets/bulletupgrade.png");
 
   //loading sounds
@@ -69,7 +70,9 @@ function preload() {
 
   //loading txt file to be converted into a level
   level1Loading = "assets/1.txt";
+  level2loading = "assets/2.txt";
   level1Txt = loadStrings(level1Loading);
+  level2Txt = loadStrings(level2loading);
 }
 
 //creating canvas and defining variables in setup()
@@ -132,7 +135,10 @@ function pushingAliensOrSomething(whichAlien) {
 
 function playLevel1() {
   loadWave(level1Txt);
-  
+}
+
+function playLevel2() {
+  loadWave(level2Txt);
 }
 
 function originalUpdradeStartPoint(startX, startY) {
@@ -151,8 +157,11 @@ function moveBulletUpgrade() {
 function draw() {
   if (levelMode === "start of level 1") {
     playLevel1();
-
     levelMode = "during level 1";
+  }
+  else if (levelMode === "start of level 2") {
+    playLevel2();
+    levelMode = "during level 2";
   }
 
   //using state variables to transition through different game screens and modes
@@ -170,11 +179,6 @@ function draw() {
     showGameOverScreen();
     checkIfAResetButtonsClicked();
   }
-}
-
-//added this so you can zoom in and out to fit the screen and don't have to refresh screen since it doesn't fit properly right now
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
 }
 
 //combining all the function necessary to run the game
@@ -201,16 +205,12 @@ function runGame() {
   
   //drawing the plane image
   image(plane, planeX, planeY, plane.width * scalar, plane.height * scalar);
-  displayBullet();
-
-  //these last two functions were used to help create the collision detection system but are not necessary for the game to run
-  drawHitBox();
-  drawPlaneHitBox();
-  drawUpgradeHitBox();
+  
+  displayBulletUpgrade();
   detectIfUpgradeCollected();
 }
 
-function displayBullet() {
+function displayBulletUpgrade() {
   if (showUpgrade) {
     image(bulletUpgradeImage, upgradeX, upgradeY, 30, 30);
   }
@@ -232,247 +232,9 @@ function runHardModeGame() {
   runGame();
 }
 
-//displaying main menu
-function showMenu() {
-  background(200);
-  //easy Mode button
-  rectMode(CENTER);
-  fill(0, 255, 0, 125);
-  rect(width / 2, height / 2 - 350, 400, 150);
-  textAlign(CENTER, CENTER);
-  textSize(50);
-  fill(0);
-  text("Easy Mode", width / 2, height / 2 - 350);
-
-  //hard Mode button
-  fill(255, 0, 0, 125);
-  rect(width / 2, height / 2, 400, 150);
-  fill(0);
-  text("Hard Mode", width / 2, height / 2);
-
-  //instructions button
-  fill(0, 0, 0, 50);
-  rect(width / 2, height / 2 + 350, 400, 150);
-  fill(0);
-  text("How to Play", width / 2, height / 2 + 350);
-}
-
-//checking if a button on the main meny is clicked
-//changes colour when mouse is hovered over the button and changes gamemode depending on what's clicked
-function checkIfButtonClicked() {
-  if (
-    mouseX > width / 2 - 200 &&
-    mouseX < width / 2 + 200 &&
-    mouseY > height / 2 - 350 - 75 &&
-    mouseY < height / 2 - 350 + 75
-  ) {
-    //easy mode button
-    fill(255);
-    text("Easy Mode", width / 2, height / 2 - 350);
-    if (mouseIsPressed) {
-      gameMode = "easy mode";
-    }
-  }
-  if (
-    mouseX > width / 2 - 200 &&
-    mouseX < width / 2 + 200 &&
-    mouseY > height / 2 - 75 &&
-    mouseY < height / 2 + 75
-  ) {
-    //hard mode button
-    fill(255);
-    text("Hard Mode", width / 2, height / 2);
-    if (mouseIsPressed) {
-      gameMode = "hard mode";
-    }
-  }
-  if (
-    mouseX > width / 2 - 200 &&
-    mouseX < width / 2 + 200 &&
-    mouseY > height / 2 + 350 - 75 &&
-    mouseY < height / 2 + 350 + 75
-  ) {
-    //instructions button
-    fill(255);
-    text("How to Play", width / 2, height / 2 + 350);
-    if (mouseIsPressed) {
-      gameMode = "instructions menu";
-    }
-  }
-}
-
-//displaying instructions screen
-function showInstructions() {
-  background(200);
-  rectMode(CENTER);
-  textAlign(CENTER, CENTER);
-
-  textSize(100);
-  fill(0);
-  text("Instructions", width / 2, height / 2 - 350);
-
-  //writing out instructions
-  textSize(30);
-  fill(0);
-  text(
-    "Use the WASD keys to control the plane and the Space Button to shoot",
-    width / 2,
-    height / 2 - 150
-  );
-  text(
-    "Aliens will come down in waves to try and destroy you",
-    width / 2,
-    height / 2 - 80
-  );
-  text("Easy: Seven Seconds Per Wave", width / 2 - 300, height / 2 - 30);
-  text("Hard: Two Seconds Per Wave", width / 2 + 300, height / 2 - 30);
-  text(
-    "If you are hit by an Alien or one reaches the bottom, it's GAME OVER",
-    width / 2,
-    height / 2 + 50
-  );
-  text(
-    "Get the HIGHEST SCORE POSSIBLE before the Aliens win",
-    width / 2,
-    height / 2 + 135
-  );
-  text(
-    "Press the L key to switch between basic and double shot",
-    width / 2,
-    height / 2 + 215
-  );
-  text(
-    "To access the main menu at any time, press the m key",
-    width / 2,
-    height / 2 + 250
-  );
-
-  //back to main menu button
-  textSize(80);
-  fill(255);
-  text("back", 250, 125);
-}
-
-//displaying a "back button" which changes colour when hovered over and sends you back to the
-//main menu if clicked
-function checkIfBackButtonClicked() {
-  if (
-    mouseX > 250 - 200 &&
-    mouseX < 250 + 200 &&
-    mouseY > 125 - 75 &&
-    mouseY < 125 + 75
-  ) {
-    fill(0, 255, 0, 125);
-    text("back", 250, 125);
-    if (mouseIsPressed) {
-      gameMode = "main menu";
-    }
-  }
-}
-
-//displaying the screen which will come up when you lose
-function showGameOverScreen() {
-  background(0);
-  rectMode(CENTER);
-  textAlign(CENTER, CENTER);
-
-  //game over text
-  textSize(200);
-  fill(255, 0, 0);
-  text("GAME OVER", width / 2, height / 4);
-
-  //displaying score
-  fill(0, 0, 0, 50);
-  rect(width / 2 - 400, height / 2 + 350, 400, 150);
-  textSize(80);
-  fill(255);
-  text("Score: " + score, width / 2, height / 2);
-
-  //main menu button
-  fill(0, 0, 0, 50);
-  rect(width / 2 - 400, height / 2 + 350, 400, 150);
-  textSize(80);
-  fill(255);
-  text("Main Menu", width / 2 - 400, height / 2 + 350);
-
-  //play again button
-  fill(0, 0, 0, 50);
-  rect(width / 2 + 400, height / 2 + 350, 400, 150);
-  textSize(80);
-  fill(255);
-  text("Play Again", width / 2 + 400, height / 2 + 350);
-}
-
-//checking if buttons on the game over screen are clicked, changing colours when hovered over
-function checkIfAResetButtonsClicked() {
-  if (
-    mouseX > width / 2 + 400 - 200 &&
-    mouseX < width / 2 + 400 + 200 &&
-    mouseY > height / 2 + 350 - 75 &&
-    mouseY < height / 2 + 350 + 75
-  ) {
-    //play again button
-    fill(0, 255, 0, 125);
-    text("Play Again", width / 2 + 400, height / 2 + 350);
-    if (mouseIsPressed) {
-      score = 0;
-      if (currentGameMode === "easy mode") {
-        gameMode = "easy mode";
-      } else if (currentGameMode === "hard mode") {
-        gameMode = "hard mode";
-      }
-    }
-  } else if (
-    mouseX > width / 2 - 400 - 200 &&
-    mouseX < width / 2 - 400 + 200 &&
-    mouseY > height / 2 + 350 - 75 &&
-    mouseY < height / 2 + 350 + 75
-  ) {
-    //main menu button
-    fill(0, 255, 0, 125);
-    text("Main Menu", width / 2 - 400, height / 2 + 350);
-    if (mouseIsPressed) {
-      score = 0;
-      gameMode = "main menu";
-    }
-  }
-}
-
-//displaying score with the score variable while the game is running in the top right
-function showScore() {
-  rectMode(CENTER);
-  textAlign(CENTER, CENTER);
-  textSize(80);
-  fill(255);
-  text(score, width - 90, 90);
-}
-
-//since this loops the createaliens function in setup it messes with the game
-// function windowResized() {
-//   setup();
-// }
-
-//adding mouseWheel function which will use the same scalar variable to control the size of the plane
-//this doesn't have a practical use in the game yet but will in a future version
-function mouseWheel() {
-  if (canPlaneMove === true) {
-    if (event.delta > 0) {
-      scalar *= 1.8;
-    } else if (event.delta < 0) {
-      scalar /= 1.8;
-    }
-  }
-}
-
 //allowing plane to move within a defined space in the canvas
 function movePlane() {
-  //same application as the mousewheel function but with arrow keys
   if (canPlaneMove === true) {
-    if (keyCode === UP_ARROW) {
-      scalar *= 1.02;
-    } else if (keyCode === DOWN_ARROW) {
-      scalar /= 1.02;
-    }
     //changing x and y cords with WASD keys to move image
     if (keyIsDown(87)) {
       imageMode(CENTER);
@@ -742,27 +504,6 @@ function detectIfAlienHitByBulletAndDestroy() {
   }
 }
 
-// DOUBLE SHOT BULLETS CANNOT BE DETECTED YET THEY WILL NOT KILL THE ALIENS
-
-//draws a hitbox around the palne
-function drawPlaneHitBox() {
-  // fill(255);
-  // rectMode(CORNER);
-  // rect(planeX - 45 * scalar, planeY - 190 * scalar, 95 * scalar, 250 * scalar);
-  // rect(planeX - 125 * scalar, planeY + 1 * scalar, 255 * scalar, 200 * scalar);
-}
-
-function drawUpgradeHitBox() {
-  // ellipseMode(CENTER);
-  // if (detectIfUpgradeCollected()) {
-  //   fill(0, 255, 0);
-  //   ellipse(upgradeX, upgradeY, 30);
-  // } else {
-  //   fill(255);
-  //   ellipse(upgradeX, upgradeY, 30);
-  // }
-}
-
 function detectIfUpgradeCollected() {
   if (
     collideRectCircle(
@@ -889,7 +630,47 @@ class TwoHitAlien extends Alien {
   constructor(x, y, path) {
     super(x, y, path);
     this.strength = 2;
-    super.moveIndividualAliens();
+  }
+  moveIndividualAliens() {
+    push();
+    if (this.path === "simple top-down") {
+      // for (let i = aliens.length - 1; i >= 0; i--) {
+      this.y += this.dy;
+      // if (aliens[i].x > height) {
+      // aliens.shift();
+      // gameMode = "game over";
+      // resetArrays();
+      // }
+      // }
+    } else if (this.path === "simple zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= width - 40 || this.x <= 25) {
+        this.dx *= -1;
+      }
+    } else if (this.path === "tight-left zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= 400 || this.x <= 25) {
+        this.dx *= -1;
+      }
+    } else if (this.path === "tight-right zigzag") {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x >= width - 25 || this.x <= width - 400) {
+        this.dx *= -1;
+      }
+    } else if (this.path === "circle thing") {
+      this.x = cos(this.theta) * 150;
+      this.y = sin(this.theta) * 150;
+      this.theta -= 5;
+
+      translate(this.x + width / 2, this.y + 300);
+      // translate(width/2, 200);
+    }
+    imageMode(CENTER);
+    image(twoHitAlienImage, this.x, this.y, 50, 50);
+    pop();
   }
 }
 
@@ -897,17 +678,230 @@ class TwoHitAlien extends Alien {
 function moveAliens() {
   for (let i = aliens.length - 1; i >= 0; i--) {
     aliens[i].moveIndividualAliens();
-    // if (aliens[i].y - 25 > height) {
-    //   aliens.shift();
-    // gameMode = "game over";
-    // resetArrays();
-    // }
+    if (aliens[i].y - 25 > height) {
+      aliens.shift();
+    gameMode = "game over";
+    resetArrays();
+    }
   }
 }
 
-//looping through all aliens to draw a hitbox
-function drawHitBox() {
-  for (let i = aliens.length - 1; i >= 0; i--) {
-    aliens[i].individualHitBox();
+
+
+
+//Menus and Displays
+
+//displaying main menu
+function showMenu() {
+  background(200);
+  //easy Mode button
+  rectMode(CENTER);
+  fill(0, 255, 0, 125);
+  rect(width / 2, height / 2 - 350, 400, 150);
+  textAlign(CENTER, CENTER);
+  textSize(50);
+  fill(0);
+  text("Easy Mode", width / 2, height / 2 - 350);
+
+  //hard Mode button
+  fill(255, 0, 0, 125);
+  rect(width / 2, height / 2, 400, 150);
+  fill(0);
+  text("Hard Mode", width / 2, height / 2);
+
+  //instructions button
+  fill(0, 0, 0, 50);
+  rect(width / 2, height / 2 + 350, 400, 150);
+  fill(0);
+  text("How to Play", width / 2, height / 2 + 350);
+}
+
+//checking if a button on the main meny is clicked
+//changes colour when mouse is hovered over the button and changes gamemode depending on what's clicked
+function checkIfButtonClicked() {
+  if (
+    mouseX > width / 2 - 200 &&
+    mouseX < width / 2 + 200 &&
+    mouseY > height / 2 - 350 - 75 &&
+    mouseY < height / 2 - 350 + 75
+  ) {
+    //easy mode button
+    fill(255);
+    text("Easy Mode", width / 2, height / 2 - 350);
+    if (mouseIsPressed) {
+      gameMode = "easy mode";
+    }
   }
+  if (
+    mouseX > width / 2 - 200 &&
+    mouseX < width / 2 + 200 &&
+    mouseY > height / 2 - 75 &&
+    mouseY < height / 2 + 75
+  ) {
+    //hard mode button
+    fill(255);
+    text("Hard Mode", width / 2, height / 2);
+    if (mouseIsPressed) {
+      gameMode = "hard mode";
+    }
+  }
+  if (
+    mouseX > width / 2 - 200 &&
+    mouseX < width / 2 + 200 &&
+    mouseY > height / 2 + 350 - 75 &&
+    mouseY < height / 2 + 350 + 75
+  ) {
+    //instructions button
+    fill(255);
+    text("How to Play", width / 2, height / 2 + 350);
+    if (mouseIsPressed) {
+      gameMode = "instructions menu";
+    }
+  }
+}
+
+//displaying instructions screen
+function showInstructions() {
+  background(200);
+  rectMode(CENTER);
+  textAlign(CENTER, CENTER);
+
+  textSize(100);
+  fill(0);
+  text("Instructions", width / 2, height / 2 - 350);
+
+  //writing out instructions
+  textSize(30);
+  fill(0);
+  text(
+    "Use the WASD keys to control the plane and the Space Button to shoot",
+    width / 2,
+    height / 2 - 150
+  );
+  text(
+    "Aliens will come down in waves to try and destroy you",
+    width / 2,
+    height / 2 - 80
+  );
+  text("Easy: Seven Seconds Per Wave", width / 2 - 300, height / 2 - 30);
+  text("Hard: Two Seconds Per Wave", width / 2 + 300, height / 2 - 30);
+  text(
+    "If you are hit by an Alien or one reaches the bottom, it's GAME OVER",
+    width / 2,
+    height / 2 + 50
+  );
+  text(
+    "Get the HIGHEST SCORE POSSIBLE before the Aliens win",
+    width / 2,
+    height / 2 + 135
+  );
+  text(
+    "Press the L key to switch between basic and double shot",
+    width / 2,
+    height / 2 + 215
+  );
+  text(
+    "To access the main menu at any time, press the m key",
+    width / 2,
+    height / 2 + 250
+  );
+
+  //back to main menu button
+  textSize(80);
+  fill(255);
+  text("back", 250, 125);
+}
+
+//displaying a "back button" which changes colour when hovered over and sends you back to the
+//main menu if clicked
+function checkIfBackButtonClicked() {
+  if (
+    mouseX > 250 - 200 &&
+    mouseX < 250 + 200 &&
+    mouseY > 125 - 75 &&
+    mouseY < 125 + 75
+  ) {
+    fill(0, 255, 0, 125);
+    text("back", 250, 125);
+    if (mouseIsPressed) {
+      gameMode = "main menu";
+    }
+  }
+}
+
+//displaying the screen which will come up when you lose
+function showGameOverScreen() {
+  background(0);
+  rectMode(CENTER);
+  textAlign(CENTER, CENTER);
+
+  //game over text
+  textSize(200);
+  fill(255, 0, 0);
+  text("GAME OVER", width / 2, height / 4);
+
+  //displaying score
+  fill(0, 0, 0, 50);
+  rect(width / 2 - 400, height / 2 + 350, 400, 150);
+  textSize(80);
+  fill(255);
+  text("Score: " + score, width / 2, height / 2);
+
+  //main menu button
+  fill(0, 0, 0, 50);
+  rect(width / 2 - 400, height / 2 + 350, 400, 150);
+  textSize(80);
+  fill(255);
+  text("Main Menu", width / 2 - 400, height / 2 + 350);
+
+  //play again button
+  fill(0, 0, 0, 50);
+  rect(width / 2 + 400, height / 2 + 350, 400, 150);
+  textSize(80);
+  fill(255);
+  text("Play Again", width / 2 + 400, height / 2 + 350);
+}
+
+//checking if buttons on the game over screen are clicked, changing colours when hovered over
+function checkIfAResetButtonsClicked() {
+  if (
+    mouseX > width / 2 + 400 - 200 &&
+    mouseX < width / 2 + 400 + 200 &&
+    mouseY > height / 2 + 350 - 75 &&
+    mouseY < height / 2 + 350 + 75
+  ) {
+    //play again button
+    fill(0, 255, 0, 125);
+    text("Play Again", width / 2 + 400, height / 2 + 350);
+    if (mouseIsPressed) {
+      score = 0;
+      if (currentGameMode === "easy mode") {
+        gameMode = "easy mode";
+      } else if (currentGameMode === "hard mode") {
+        gameMode = "hard mode";
+      }
+    }
+  } else if (
+    mouseX > width / 2 - 400 - 200 &&
+    mouseX < width / 2 - 400 + 200 &&
+    mouseY > height / 2 + 350 - 75 &&
+    mouseY < height / 2 + 350 + 75
+  ) {
+    //main menu button
+    fill(0, 255, 0, 125);
+    text("Main Menu", width / 2 - 400, height / 2 + 350);
+    if (mouseIsPressed) {
+      score = 0;
+      gameMode = "main menu";
+    }
+  }
+}
+
+//displaying score with the score variable while the game is running in the top right
+function showScore() {
+  rectMode(CENTER);
+  textAlign(CENTER, CENTER);
+  textSize(80);
+  fill(255);
+  text(score, width - 90, 90);
 }
